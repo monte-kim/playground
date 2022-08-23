@@ -4,29 +4,63 @@ import { useState } from "react";
 
 function App() {
   let logo = "ReactBlog";
-  let [title, a] = useState([
-    "남자 코트 추천",
-    "여자 코트 추천",
-    "공용 코트 추천",
+  let [title, setTitle] = useState([
+    "Man's Outdoor",
+    "Woman's Outdoor",
+    "Children Outdoor",
   ]);
-  let [likes, b] = useState(0);
+  let [likes, setLikes] = useState(0);
 
   return (
     <div className="App">
       <div className="black-nav">
         <h4>{logo}</h4>
       </div>
+      <button
+        onClick={() => {
+          let copyTitle = [...title];
+          copyTitle.sort();
+          setTitle(copyTitle);
+        }}
+      >
+        SORT
+      </button>
+      <button
+        onClick={() => {
+          let copyTitle = []; //'...title' = 'man's ...' without []
+          for (let i = 0; i < title.length; i++) {
+            if (i === 0) {
+              copyTitle[i] = title[title.length - 1];
+            } else {
+              copyTitle[i] = title[i - 1];
+            }
+          }
+          setTitle(copyTitle);
+        }}
+      >
+        CHANGE
+      </button>
       <div className="list">
-        <h4>{title[0]} <span>👍</span> {likes} </h4>
-        <p>8월 19일 발행</p>
+        <h4>
+          {title[0]} &nbsp;&nbsp;{" "}
+          <span
+            onClick={() => {
+              setLikes(likes++);
+            }}
+          >
+            👍
+          </span>
+          {likes}
+        </h4>
+        <p>August 19th 2022</p>
       </div>
       <div className="list">
         <h4>{title[1]}</h4>
-        <p>8월 20일 발행</p>
+        <p>August 20th 2022</p>
       </div>
       <div className="list">
         <h4>{title[2]}</h4>
-        <p>8월 22일 발행</p>
+        <p>August 22nd 2022</p>
       </div>
     </div>
   );
