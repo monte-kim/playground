@@ -9,7 +9,7 @@ function App() {
     "Woman's Outdoor",
     "Children Outdoor",
   ]);
-  let [likes, setLikes] = useState(0);
+  let [likes, setLikes] = useState([0, 0, 0]);
   let [modal, setModal] = useState(false); //modal visibility false/true
 
   return (
@@ -41,33 +41,32 @@ function App() {
       >
         CHANGE
       </button>
-      <div className="list">
-        <h4>
-          {title[0]} &nbsp;&nbsp;{" "}
-          <span
-            onClick={() => {
-              setLikes(likes++);
-            }}
-          >
-            👍
-          </span>
-          {likes}
-        </h4>
-        <p>August 19th 2022</p>
-      </div>
-      <div className="list">
-        <h4 onClick={() => {
-          setModal(!modal);
-        }}>{title[1]}</h4>
-        <p>August 20th 2022</p>
-      </div>
-      <div className="list">
-        <h4 onClick={() => {
-          setModal(!modal);
-        }}>{title[2]}</h4>
-        <p>August 22nd 2022</p>
-      </div>
 
+      {title.map(function (a, i) {
+        return (
+          <div className="list" key={i}>
+            <h4
+              onClick={() => {
+                setModal(!modal);
+              }}
+            >
+              {" "}
+              {title[i]}{" "}
+            </h4>
+            <span
+              onClick={() => {
+                let copyLikes = [...likes];
+                copyLikes[i]++;
+                setLikes(copyLikes);
+              }}
+            >
+              👍
+            </span>
+            {likes[i]}
+            <p>August 20th 2022</p>
+          </div>
+        );
+      })}
       {modal === true ? <Modal /> : null}
     </div>
   );
