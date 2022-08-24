@@ -62,6 +62,19 @@ function App() {
         <h4>{title[2]}</h4>
         <p>August 22nd 2022</p>
       </div>
+
+      <Modal></Modal>
+      
+    </div>
+  );
+}
+
+function Modal() {
+  return (
+    <div className="modal">
+      <h4>Title</h4>
+      <p>Date</p>
+      <p>Detail</p>
     </div>
   );
 }
