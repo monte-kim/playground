@@ -10,6 +10,7 @@ function App() {
     "Children Outdoor",
   ]);
   let [likes, setLikes] = useState(0);
+  let [modal, setModal] = useState(false); //modal visibility false/true
 
   return (
     <div className="App">
@@ -55,16 +56,19 @@ function App() {
         <p>August 19th 2022</p>
       </div>
       <div className="list">
-        <h4>{title[1]}</h4>
+        <h4 onClick={() => {
+          setModal(!modal);
+        }}>{title[1]}</h4>
         <p>August 20th 2022</p>
       </div>
       <div className="list">
-        <h4>{title[2]}</h4>
+        <h4 onClick={() => {
+          setModal(!modal);
+        }}>{title[2]}</h4>
         <p>August 22nd 2022</p>
       </div>
 
-      <Modal></Modal>
-      
+      {modal === true ? <Modal /> : null}
     </div>
   );
 }
