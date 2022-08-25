@@ -4,13 +4,10 @@ import { useState } from "react";
 
 function App() {
   let logo = "ReactBlog";
-  let [title, setTitle] = useState([
-    "Man's Outdoor",
-    "Woman's Outdoor",
-    "Children Outdoor",
-  ]);
+  let [title, setTitle] = useState(["Man's Outdoor", "Woman's Outdoor", "Children Outdoor"]);
   let [likes, setLikes] = useState([0, 0, 0]);
   let [modal, setModal] = useState(false); //modal visibility false/true
+  let [titleIndex, setIndex] = useState(0);
 
   return (
     <div className="App">
@@ -48,6 +45,7 @@ function App() {
             <h4
               onClick={() => {
                 setModal(!modal);
+                setIndex(i);
               }}
             >
               {" "}
@@ -67,17 +65,32 @@ function App() {
           </div>
         );
       })}
-      {modal === true ? <Modal /> : null}
+      {modal === true ? <Modal color="orange" title={title} titleIndex={titleIndex} setTitle={setTitle} /> : null}
     </div>
   );
 }
 
-function Modal() {
+function Modal(props) {
   return (
-    <div className="modal">
-      <h4>Title</h4>
+    <div className="modal" style={{ background: props.color }}>
+      <h4>{props.title[props.titleIndex]}</h4>
       <p>Date</p>
       <p>Detail</p>
+      {/* <button
+        onClick={() => {
+          let copyTitle = [...props.title];
+          for (let i = 0; i < props.title.length; i++) {
+            if (i === 0) {
+              copyTitle[i] = props.title[props.title.length - 1];
+            } else {
+              copyTitle[i] = props.title[i - 1];
+            }
+          }
+          props.setTitle(copyTitle);
+        }}
+      >
+        CHANGE
+      </button> */}
     </div>
   );
 }
