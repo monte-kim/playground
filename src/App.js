@@ -4,10 +4,11 @@ import { useState } from "react";
 
 function App() {
   let logo = "ReactBlog";
-  let [title, setTitle] = useState(["Man's Outdoor", "Woman's Outdoor", "Children Outdoor"]);
-  let [likes, setLikes] = useState([0, 0, 0]);
+  let [title, setTitle] = useState(["Man's Outdoor", "Woman's Outdoor", "Children Outdoor"]); //리스트 제목
+  let [likes, setLikes] = useState([0, 0, 0]); //리스트 좋아요 수
   let [modal, setModal] = useState(false); //modal visibility false/true
-  let [titleIndex, setIndex] = useState(0);
+  let [titleIndex, setIndex] = useState(0); //몇번째 리스트
+  let [userInput, setInput] = useState(""); //사용자 입력
 
   return (
     <div className="App">
@@ -48,23 +49,57 @@ function App() {
                 setIndex(i);
               }}
             >
-              {" "}
-              {title[i]}{" "}
+              {title[i]}
+              <span
+                onClick={(e) => {
+                  e.stopPropagation();
+                  let copyLikes = [...likes];
+                  copyLikes[i]++;
+                  setLikes(copyLikes);
+                }}
+              >
+                👍
+              </span>
+              {likes[i]}
             </h4>
-            <span
+            <p>August 20th 2022</p>
+            <button
               onClick={() => {
+                let copyTitle = [...title];
                 let copyLikes = [...likes];
-                copyLikes[i]++;
+                //TODO 해당 리스트 삭제
+                copyTitle.splice(i, 1);
+                copyLikes.splice(i, 1);
+                // copyTitle.unshift(userInput);
+                // copyLikes.unshift(0);
+                setTitle(copyTitle);
                 setLikes(copyLikes);
               }}
             >
-              👍
-            </span>
-            {likes[i]}
-            <p>August 20th 2022</p>
+              ERASE
+            </button>
           </div>
         );
       })}
+
+      <input
+        onChange={(e) => {
+          setInput(e.target.value);
+        }}
+      ></input>
+      <button
+        onClick={(e) => {
+          let copyTitle = [...title];
+          let copyLikes = [...likes];
+          copyTitle.unshift(userInput);
+          copyLikes.unshift(0);
+          setTitle(copyTitle);
+          setLikes(copyLikes);
+        }}
+      >
+        ADD
+      </button>
+
       {modal === true ? (
         <Modal color="orange" title={title} titleIndex={titleIndex} setModal={setModal} setTitle={setTitle} />
       ) : null}
