@@ -78,21 +78,6 @@ function Modal(props) {
       <h4>{props.title[props.titleIndex]}</h4>
       <p>Date</p>
       <p>Detail</p>
-      {/* <button
-        onClick={() => {
-          let copyTitle = [...props.title];
-          for (let i = 0; i < props.title.length; i++) {
-            if (i === 0) {
-              copyTitle[i] = props.title[props.title.length - 1];
-            } else {
-              copyTitle[i] = props.title[i - 1];
-            }
-          }
-          props.setTitle(copyTitle);
-        }}
-      >
-        CHANGE
-      </button> */}
       <button
         onClick={() => {
           props.setModal(false);
