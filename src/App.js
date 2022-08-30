@@ -44,7 +44,7 @@ function App() {
           <div className="list" key={i}>
             <h4
               onClick={() => {
-                setModal(!modal);
+                setModal(true);
                 setIndex(i);
               }}
             >
@@ -65,7 +65,9 @@ function App() {
           </div>
         );
       })}
-      {modal === true ? <Modal color="orange" title={title} titleIndex={titleIndex} setTitle={setTitle} /> : null}
+      {modal === true ? (
+        <Modal color="orange" title={title} titleIndex={titleIndex} setModal={setModal} setTitle={setTitle} />
+      ) : null}
     </div>
   );
 }
@@ -91,6 +93,13 @@ function Modal(props) {
       >
         CHANGE
       </button> */}
+      <button
+        onClick={() => {
+          props.setModal(false);
+        }}
+      >
+        CLOSE
+      </button>
     </div>
   );
 }
