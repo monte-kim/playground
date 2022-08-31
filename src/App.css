@@ -1,3 +1,29 @@
+.main-bg{
+  height: 600px;
+  position: relative;
+  z-index: 1;
+}
+
+.main-bg::before{
+  content: '';
+  background-image: url('./crayon.png');
+  background-position: center;
+  background-size: cover;
+  position: absolute;
+  z-index: -1;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  opacity: 0.3;
+  filter: blur(10px);
+}
+
+.row{
+margin-top: 4.5%;
+padding-top: 6%;
+}
+
 .App {
   text-align: center;
 }
