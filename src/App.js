@@ -1,6 +1,7 @@
 import "./App.css";
-import { useState } from "react";
+import Product from "./Product";
 import data from "./data";
+import { useState } from "react";
 import { Container, Navbar, Nav } from "react-bootstrap";
 
 function App() {
@@ -17,17 +18,10 @@ function App() {
           </Nav>
         </Container>
       </Navbar>
-
       <div className="main-bg container">
         <div className="row">
           {crayons.map(function (a, i) {
-            return (
-              <div className="col-md-4">
-                <img height="300px" src={crayons[i].image} />
-                <h4>{crayons[i].Company}</h4>
-                <p>{crayons[i].price}</p>
-              </div>
-            );
+            return <Product crayons={crayons[i]}></Product>;
           })}
         </div>
       </div>
