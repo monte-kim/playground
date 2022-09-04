@@ -31,6 +31,13 @@ function App() {
             >
               Detail
             </Nav.Link>
+            <Nav.Link
+              onClick={() => {
+                navigate("/event");
+              }}
+            >
+              Event
+            </Nav.Link>
           </Nav>
         </Container>
       </Navbar>
