@@ -48,13 +48,14 @@ function App() {
             <div className="main-bg container">
               <div className="row">
                 {crayons.map(function (a, i) {
-                  return <Product crayons={crayons[i]}></Product>;
+                  return <Product key={i} crayons={crayons[i]}></Product>;
                 })}
               </div>
             </div>
           }
         />
-        <Route path="/detail" element={<Detail></Detail>} />
+        <Route path="/detail/:id" element={<Detail crayons={crayons}></Detail>} />
+
         <Route path="/event" element={<Event></Event>}>
           <Route
             path="one"

@@ -18,7 +18,7 @@ let data = [
     id: 2,
     company: "Colorations",
     content: "Coloration Crayon, extra-large but cheap",
-    price: 3000,
+    price: 2500,
     image: "https://www.consumer.go.kr/site/consumer/upload/recall/RCLL_000000000013104_20180522023002482.png",
   },
 ];

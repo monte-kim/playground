@@ -1,19 +1,23 @@
+import { useParams } from "react-router-dom";
+import styled from "styled-components";
+
 function Detail(props) {
+  let { id } = useParams(); //get url parameter (~/:id)
+  let getCrayon = props.crayons.find(function (x) {
+    return x.id === Number(id);
+  });
+
   return (
     <div className="container">
       <div className="row">
         <div className="col-md-6">
-          <img
-            src="https://www.ikea.com/kr/en/images/products/mala-wax-crayon-mixed-colours__1089237_pe861528_s5.jpg?f=s"
-            height="300px"
-            alt="detail"
-          />
+          <img src={getCrayon.image} height="300px" alt="detail" />
         </div>
         <div className="col-md-6">
-          <h4 className="pt-5">상품명</h4>
-          <p>상품설명</p>
-          <p>120000원</p>
-          <button className="btn btn-dark">주문하기</button>
+          <h4 className="pt-5">{getCrayon.company}</h4>
+          <p>{getCrayon.content}</p>
+          <p>{getCrayon.price} ₩</p>
+          <button className="btn btn-dark">Order</button>
         </div>
       </div>
     </div>
