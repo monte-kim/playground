@@ -3,13 +3,15 @@ import Product from "./components/Product";
 import Event from "./components/Event";
 import Detail from "./routes/Detail";
 import data from "./data";
+import axios from "axios";
 import { useState } from "react";
 import { Container, Navbar, Nav } from "react-bootstrap";
 import { Routes, Route, useNavigate } from "react-router-dom";
 
 function App() {
-  let [crayons] = useState(data);
+  let [crayons, setCrayons] = useState(data);
   let navigate = useNavigate();
+  let [cnt, setCnt] = useState(0);
 
   return (
     <div className="App">
@@ -51,6 +53,27 @@ function App() {
                   return <Product key={i} crayons={crayons[i]}></Product>;
                 })}
               </div>
+              <button
+                onClick={() => {
+                  if (cnt < 2) {
+                    axios
+                      .get("https://codemonte.github.io/data2.json")
+                      .then((result) => {
+                        setCnt(cnt + 1);
+                        let copyCrayons = [...crayons];
+                        console.log(copyCrayons);
+                        copyCrayons = copyCrayons.concat(result.data);
+                        //OR let copyCrayons = [...crayons, ...result.data];
+                        setCrayons(copyCrayons);
+                      })
+                      .catch(() => {
+                        console.log("Failed to get data");
+                      });
+                  }
+                }}
+              >
+                CLICK!
+              </button>
             </div>
           }
         />
