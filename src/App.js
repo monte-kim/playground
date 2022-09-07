@@ -28,7 +28,7 @@ function App() {
             </Nav.Link>
             <Nav.Link
               onClick={() => {
-                navigate("/detail");
+                navigate("/detail/0");
               }}
             >
               Detail
@@ -55,21 +55,23 @@ function App() {
               </div>
               <button
                 onClick={() => {
-                  if (cnt < 2) {
-                    axios
-                      .get("https://codemonte.github.io/data2.json")
-                      .then((result) => {
-                        setCnt(cnt + 1);
-                        let copyCrayons = [...crayons];
-                        console.log(copyCrayons);
-                        copyCrayons = copyCrayons.concat(result.data);
-                        //OR let copyCrayons = [...crayons, ...result.data];
-                        setCrayons(copyCrayons);
-                      })
-                      .catch(() => {
-                        console.log("Failed to get data");
-                      });
-                  }
+                  // if (cnt < 2) {
+                  axios
+                    .get("https://codemonte.github.io/data2.json")
+                    .then((result) => {
+                      setCnt(cnt + 1);
+                      let copyCrayons = [...crayons];
+                      console.log(copyCrayons);
+                      copyCrayons = copyCrayons.concat(result.data);
+                      //OR let copyCrayons = [...crayons, ...result.data];
+                      setCrayons(copyCrayons);
+                    })
+                    .catch(() => {
+                      console.log("Failed to get data");
+                    });
+
+                  axios.post("/url", { data });
+                  // }
                 }}
               >
                 CLICK!
