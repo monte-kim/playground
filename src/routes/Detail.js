@@ -7,24 +7,30 @@ function Detail(props) {
   let [num, setNum] = useState(""); //input number alert
   let [event, setEvent] = useState(true);
   let [tab, setTab] = useState(0); //tab state 0~2
+  let [fade, setFade] = useState("end"); //Detail page fade in
   let { id } = useParams(); //get url parameter (~/:id)
   let getCrayon = props.crayons.find(function (x) {
     return x.id === Number(id);
   });
 
   useEffect(() => {
+    let fader = setTimeout(() => {
+      setFade("end");
+    }, 10);
     let timer = setTimeout(() => {
       setEvent(false);
     }, 2000);
     if (isNaN(num)) alert("Only numbers available");
     return () => {
       //execute once when unmounted
+      setFade("");
+      clearTimeout(fader);
       clearTimeout(timer);
     };
   }, [num]); //execute once when mounted
 
   return (
-    <div className="container">
+    <div className={`container start ${fade}`}>
       {event ? <div className="alert alert-warning">Buy in 2 seconds, get 50% discount!</div> : null}
       <div className="row">
         <div className="col-md-6">
@@ -84,13 +90,17 @@ function Detail(props) {
 }
 
 function TabContent({ tab }) {
-  if (tab === 0) {
-    return <div>Content 0</div>;
-  } else if (tab === 1) {
-    return <div>Content 1</div>;
-  } else if (tab === 2) {
-    return <div>Content 2</div>;
-  }
+  let [fade, setFade] = useState("");
+  useEffect(() => {
+    let timer = setTimeout(() => {
+      setFade("end");
+    }, 10);
+    return () => {
+      clearTimeout(timer);
+      setFade("");
+    };
+  }, [tab]);
+  return <div className={`start ${fade}`}>{[<div>content 0</div>, <div>content 1</div>, <div>content 2</div>][tab]}</div>;
 }
 
 export default Detail;
