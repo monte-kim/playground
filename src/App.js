@@ -2,17 +2,15 @@ import "./App.css";
 import Product from "./components/Product";
 import Event from "./components/Event";
 import Detail from "./routes/Detail";
+import Cart from "./routes/Cart";
 import data from "./data";
 import axios from "axios";
-import { createContext, useState } from "react";
+import { useState } from "react";
 import { Container, Navbar, Nav } from "react-bootstrap";
 import { Routes, Route, useNavigate } from "react-router-dom";
 
-export let Context1 = createContext();
-
 function App() {
   let [crayons, setCrayons] = useState(data);
-  let [stock, setStock] = useState([10, 11, 12]);
   let navigate = useNavigate();
   let [cnt, setCnt] = useState(0);
 
@@ -35,6 +33,13 @@ function App() {
               }}
             >
               Detail
+            </Nav.Link>
+            <Nav.Link
+              onClick={() => {
+                navigate("/cart");
+              }}
+            >
+              Cart
             </Nav.Link>
             <Nav.Link
               onClick={() => {
@@ -82,14 +87,8 @@ function App() {
             </div>
           }
         />
-        <Route
-          path="/detail/:id"
-          element={
-            <Context1.Provider value={{ stock, crayons }}>
-              <Detail crayons={crayons}></Detail>
-            </Context1.Provider>
-          }
-        />
+        <Route path="/detail/:id" element={<Detail crayons={crayons}></Detail>} />
+        <Route path="/cart" element={<Cart></Cart>}></Route>
 
         <Route path="/event" element={<Event></Event>}>
           <Route
