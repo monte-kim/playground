@@ -1,9 +1,13 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Nav } from "react-bootstrap";
 // import styled from "styled-components";
 
+import { Context1 } from "../App";
+
 function Detail(props) {
+  let { stock } = useContext(Context1);
+
   let [num, setNum] = useState(""); //input number alert
   let [event, setEvent] = useState(true);
   let [tab, setTab] = useState(0); //tab state 0~2
@@ -84,13 +88,14 @@ function Detail(props) {
           </Nav.Link>
         </Nav.Item>
       </Nav>
-      <TabContent tab={tab}></TabContent>
+      <TabContent tab={tab} crayons={props.crayons}></TabContent>
     </div>
   );
 }
 
-function TabContent({ tab }) {
+function TabContent({ tab, crayons }) {
   let [fade, setFade] = useState("");
+  let { stock } = useContext(Context1);
   useEffect(() => {
     let timer = setTimeout(() => {
       setFade("end");
@@ -100,7 +105,20 @@ function TabContent({ tab }) {
       setFade("");
     };
   }, [tab]);
-  return <div className={`start ${fade}`}>{[<div>content 0</div>, <div>content 1</div>, <div>content 2</div>][tab]}</div>;
+  return (
+    <div className={`start ${fade}`}>
+      {
+        [
+          <div>
+            <h5>{stock[0]}</h5>
+            {crayons[0].company}
+          </div>,
+          <div>{crayons[1].company}</div>,
+          <div>{crayons[2].company}</div>,
+        ][tab]
+      }
+    </div>
+  );
 }
 
 export default Detail;
