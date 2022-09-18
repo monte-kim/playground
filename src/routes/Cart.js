@@ -1,6 +1,7 @@
 import { Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { changeName } from "../store";
+import { changeAge } from "../store/userSlice";
+import { addCount } from "../store/itemsSlice";
 
 function Cart() {
   let state = useSelector((state) => {
@@ -11,14 +12,24 @@ function Cart() {
 
   return (
     <div>
-      {state.user}
+      <h5>{state.user.name}'s Cart</h5>
+      <h6>
+        {state.user.name}'s Age is {state.user.age}
+      </h6>
+      <button
+        onClick={() => {
+          dispatch(changeAge(10));
+        }}
+      >
+        BUTTON
+      </button>
       <Table>
         <thead>
           <tr>
             <th>ID</th>
-            <th>상품명</th>
-            <th>수량</th>
-            <th>변경하기</th>
+            <th>PRODUCT</th>
+            <th>COUNT</th>
+            <th>ADD</th>
           </tr>
         </thead>
         <tbody>
@@ -31,7 +42,7 @@ function Cart() {
                 <td>
                   <button
                     onClick={() => {
-                      dispatch(changeName());
+                      dispatch(addCount(1));
                     }}
                   >
                     +
