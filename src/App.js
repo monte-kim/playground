@@ -29,7 +29,7 @@ function App() {
             </Nav.Link>
             <Nav.Link
               onClick={() => {
-                navigate("/detail/0");
+                navigate("/detail/2");
               }}
             >
               Detail

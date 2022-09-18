@@ -37,12 +37,12 @@ function Cart() {
             return (
               <tr key={i}>
                 <td>{state.items[i].id}</td>
-                <td>{state.items[i].name}</td>
+                <td>{state.items[i].company}</td>
                 <td>{state.items[i].count}</td>
                 <td>
                   <button
                     onClick={() => {
-                      dispatch(addCount(1));
+                      dispatch(addCount(state.items[i].id));
                     }}
                   >
                     +

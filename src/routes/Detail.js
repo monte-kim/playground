@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Nav } from "react-bootstrap";
+import { addCart } from "../store/itemsSlice";
+import { useDispatch } from "react-redux";
 // import styled from "styled-components";
 
 function Detail(props) {
+  let dispatch = useDispatch();
   let [num, setNum] = useState(""); //input number alert
   let [event, setEvent] = useState(true);
   let [tab, setTab] = useState(0); //tab state 0~2
@@ -40,15 +43,21 @@ function Detail(props) {
           <h4 className="pt-5">{getCrayon.company}</h4>
           <p>{getCrayon.content}</p>
           <p>{getCrayon.price} ₩</p>
-          <button className="btn btn-dark" style={{ marginBottom: "10px" }}>
+          <button
+            className="btn btn-dark"
+            style={{ marginBottom: "10px" }}
+            onClick={() => {
+              dispatch(addCart({ id: getCrayon.id, company: getCrayon.company, count: 1 }));
+            }}
+          >
             Order
           </button>
           <br />
-          <input
+          {/* <input
             onChange={(e) => {
               setNum(e.target.value);
             }}
-          ></input>
+          ></input> */}
         </div>
       </div>
 

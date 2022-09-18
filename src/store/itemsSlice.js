@@ -3,15 +3,21 @@ import { createSlice } from "@reduxjs/toolkit";
 let items = createSlice({
   name: "Items",
   initialState: [
-    { id: 0, name: "Mala", count: 2 },
-    { id: 1, name: "Crayola", count: 1 },
+    { id: 0, company: "Mala", count: 2 },
+    { id: 1, company: "Crayola", count: 1 },
   ],
   reducers: {
-    addCount(state) {
-      state[0].count += 1;
+    addCart(state, action) {
+      state.push(action.payload);
+    },
+    addCount(state, action) {
+      let item = state.findIndex((item) => {
+        return item.id === action.payload;
+      });
+      state[item].count += 1;
     },
   },
 });
 
-export let { addCount } = items.actions;
+export let { addCart, addCount } = items.actions;
 export default items;
