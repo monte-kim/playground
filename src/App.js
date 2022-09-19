@@ -5,7 +5,7 @@ import Detail from "./routes/Detail";
 import Cart from "./routes/Cart";
 import data from "./data";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, Navbar, Nav } from "react-bootstrap";
 import { Routes, Route, useNavigate } from "react-router-dom";
 
@@ -13,6 +13,10 @@ function App() {
   let [crayons, setCrayons] = useState(data);
   let navigate = useNavigate();
   let [cnt, setCnt] = useState(0);
+
+  useEffect(() => {
+    localStorage.setItem("watched", JSON.stringify([]));
+  }, []);
 
   return (
     <div className="App">
@@ -27,13 +31,13 @@ function App() {
             >
               Home
             </Nav.Link>
-            <Nav.Link
+            {/* <Nav.Link
               onClick={() => {
                 navigate("/detail/2");
               }}
             >
               Detail
-            </Nav.Link>
+            </Nav.Link> */}
             <Nav.Link
               onClick={() => {
                 navigate("/cart");
@@ -51,6 +55,10 @@ function App() {
           </Nav>
         </Container>
       </Navbar>
+      <div>
+        <h4>RECENTLY WATCHED</h4>
+        <h5>{localStorage.getItem("watched")}</h5>
+      </div>
       <Routes>
         <Route
           path="/"

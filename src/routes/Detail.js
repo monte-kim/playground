@@ -17,6 +17,12 @@ function Detail(props) {
   });
 
   useEffect(() => {
+    let watched = JSON.parse(localStorage.getItem("watched"));
+    watched.push(getCrayon.id);
+    localStorage.setItem("watched", JSON.stringify(watched));
+  }, []);
+
+  useEffect(() => {
     let fader = setTimeout(() => {
       setFade("end");
     }, 10);
