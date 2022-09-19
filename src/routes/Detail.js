@@ -19,6 +19,7 @@ function Detail(props) {
   useEffect(() => {
     let watched = JSON.parse(localStorage.getItem("watched"));
     watched.push(getCrayon.id);
+    watched = Array.from(new Set(watched));
     localStorage.setItem("watched", JSON.stringify(watched));
   }, []);
 

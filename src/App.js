@@ -15,7 +15,9 @@ function App() {
   let [cnt, setCnt] = useState(0);
 
   useEffect(() => {
-    localStorage.setItem("watched", JSON.stringify([]));
+    if (!localStorage.getItem("watched")) {
+      localStorage.setItem("watched", JSON.stringify([]));
+    }
   }, []);
 
   return (
