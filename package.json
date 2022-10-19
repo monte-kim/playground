@@ -1,0 +1,15 @@
+{
+  "name": "taehwan-profile",
+  "version": "1.0.0",
+  "description": "A brief profile introduction of TaeHwan.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "taehwan12",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.8",
+    "express": "^4.18.1"
+  }
+}

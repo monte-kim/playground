@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sunflower:wght@300;500&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  margin: 0;
+  font-family: 'Sunflower', san-serif;
+  background-color: #e4e4e4;
+}
+
+#backwards {
+  margin-left: 12%;
+  margin-top: 7%;
+  width: 40px;
+  height: 27px;
+  border: 2px solid;
+  border-radius: 7px;
+  justify-content: center;
+  transition-property: width, height;
+  transition-duration: 0.5s;
+}
+
+#backwards:hover {
+  width: 45px;
+  height: 30px;
+}
+
+.title {
+  margin-top: -2.5%;
+  padding-left: 20%;
+  align-items: center;
+}
+
+.container {
+  margin-top: 3%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-image {
+  text-align: right;
+}
+
+#profile-img {
+  width: 67%;
+  border-radius: 100px;
+  box-shadow: 0 0 25px #555555;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.information {
+  padding-top: 2%;
+  transition-property: font-size;
+  transition-duration: 0.5s;
+}
+
+.information:hover {
+  font-size: 150%;
+}
+
+#git-link,
+#mail-link:hover {
+  cursor: pointer;
+}
