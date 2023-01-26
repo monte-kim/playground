@@ -2,7 +2,8 @@ import { Component } from 'react';
 
 class CardList extends Component {
   render() {
-    console.log('remd');
+    console.log('render from CardList');
+    // 리액트가 re-render 할 때는, state가 변할 때, 또는 props가 변할 때이다.
     const { monsters } = this.props;
 
     return (
