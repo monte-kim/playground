@@ -1,21 +1,19 @@
-import { Component } from 'react';
+// import { Component } from 'react';
 
 import './card-list.styles.css';
 import Card from '../card/card.component';
 
-class CardList extends Component {
-  render() {
-    // 리액트가 re-render 할 때는, state가 변할 때, 또는 props가 변할 때이다.
-    const { monsters } = this.props;
+const CardList = ({ monsters }) => {
+  // 리액트가 re-render 할 때는, state가 변할 때, 또는 props가 변할 때이다.
+  // const { monsters } = props;
 
-    return (
-      <div className='card-list'>
-        {monsters.map((monster) => {
-          return <Card monster={monster} />;
-        })}
-      </div>
-    );
-  }
-}
+  return (
+    <div className='card-list'>
+      {monsters.map((monster) => {
+        return <Card monster={monster} />;
+      })}
+    </div>
+  );
+};
 
 export default CardList;
