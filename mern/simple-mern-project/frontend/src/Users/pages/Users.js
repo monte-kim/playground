@@ -1,9 +1,16 @@
+import UsersList from '../components/UsersList';
+
 const Users = () => {
-  return (
-    <div>
-      <h1>this is the users page.</h1>
-    </div>
-  );
+  const USERS = [
+    {
+      id: 'u1',
+      image: 'https://www.jungle.co.kr/image/c09b682044b485b28ca0141d',
+      name: 'Monte',
+      places: '3',
+    },
+  ];
+
+  return <UsersList items={USERS} />;
 };
 
 export default Users;
