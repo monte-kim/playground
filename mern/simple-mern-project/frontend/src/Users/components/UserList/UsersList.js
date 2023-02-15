@@ -1,4 +1,4 @@
-import UserItem from './UserItem';
+import UserItem from '../UserItem/UserItem';
 
 import './UsersList.scss';
 

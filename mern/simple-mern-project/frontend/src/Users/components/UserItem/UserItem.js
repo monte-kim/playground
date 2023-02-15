@@ -1,4 +1,4 @@
-import Avatar from '../../shared/UIElements/Avatar';
+import Avatar from '../../../shared/UIElements/Avatar/Avatar';
 import { Link } from 'react-router-dom';
 
 import './UserItem.scss';
