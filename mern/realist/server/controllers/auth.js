@@ -53,3 +53,12 @@ export const preRegister = async (req, res) => {
     return res.json({ error: 'Something went wrong. Try again.' });
   }
 };
+
+export const register = async (req, res) => {
+  try {
+    console.log(req.body);
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: 'Something went wrong. Try again.' });
+  }
+};
