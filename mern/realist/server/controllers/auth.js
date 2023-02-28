@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { nanoid } from 'nanoid';
+import validator from 'email-validator';
 
 import * as config from '../config.js';
 import { emailTemplate } from '../helpers/email.js';
@@ -16,6 +17,22 @@ export const preRegister = async (req, res) => {
   try {
     // console.log(req.body);
     const { email, password } = req.body;
+
+    // validation
+    if (!validator.validate(email)) {
+      return res.json({ error: 'A valid email is required' });
+    }
+    if (!password) {
+      return res.json({ error: 'Password is required' });
+    } else if (password?.length < 8) {
+      return res.json({ error: 'Password should be at least 8 characters' });
+    }
+
+    const user = await User.findOne({ email });
+    if (user) {
+      return res.json({ error: 'Email is taken' });
+    }
+
     const token = jwt.sign({ email, password }, config.JWT_SECRET, {
       expiresIn: '1h',
     });
@@ -77,4 +94,9 @@ export const register = async (req, res) => {
     console.log(err);
     return res.json({ error: 'Something went wrong. Try again.' });
   }
+};
+
+export const login = async (req, res) => {
+  try {
+  } catch (err) {}
 };
