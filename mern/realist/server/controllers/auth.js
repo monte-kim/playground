@@ -98,5 +98,36 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-  } catch (err) {}
+    const { email, password } = req.body;
+
+    // 1. 이메일로 사용자 찾기
+    const user = await User.findOne({ email });
+
+    // 2. 암호 대조
+    const match = await comparePassword(password, user.password);
+    if (!match) {
+      return res.json({ error: 'Wrong password' });
+    }
+
+    // 3. JWT 토큰 생성
+    const token = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
+      expiresIn: '1h',
+    });
+    const refreshToken = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
+      expiresIn: '7d',
+    });
+
+    // 4. 로그인 응답 보내기
+    user.password = undefined;
+    user.resetCode = undefined;
+
+    return res.json({
+      token,
+      refreshToken,
+      user,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: 'Something went wrong. Try again.' });
+  }
 };
