@@ -43,7 +43,8 @@ export const preRegister = async (req, res) => {
 
 export const register = async (req, res) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
+    const { email, password } = jwt.verify(req.body.token, config.JWT_SECRET);
   } catch (err) {
     console.log(err);
     return res.json({ error: 'Something went wrong. Try again.' });
