@@ -1,7 +1,10 @@
 import jwt from 'jsonwebtoken';
+import { nanoid } from 'nanoid';
 
 import * as config from '../config.js';
 import { emailTemplate } from '../helpers/email.js';
+import { hashPassword, comparePassword } from '../helpers/auth.js';
+import User from '../models/user.js';
 
 export const welcome = (req, res) => {
   res.json({
@@ -45,6 +48,31 @@ export const register = async (req, res) => {
   try {
     // console.log(req.body);
     const { email, password } = jwt.verify(req.body.token, config.JWT_SECRET);
+
+    const hashedPassword = await hashPassword(password);
+
+    const user = await new User({
+      username: nanoid(6),
+      email,
+      password: hashedPassword,
+    }).save();
+
+    const token = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
+      expiresIn: '1h',
+    });
+    const refreshToken = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
+      expiresIn: '7d',
+    });
+
+    // 비밀번호 및 신규 비밀번호 생성 코드는 전달하지 않는다.
+    user.password = undefined;
+    user.resetCode = undefined;
+
+    return res.json({
+      token,
+      refreshToken,
+      user,
+    });
   } catch (err) {
     console.log(err);
     return res.json({ error: 'Something went wrong. Try again.' });
