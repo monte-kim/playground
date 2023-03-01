@@ -198,3 +198,29 @@ export const accessAccount = async (req, res) => {
     return res.json({ error: 'Something went wrong. Try again.' });
   }
 };
+
+export const refreshToken = async (req, res) => {
+  try {
+    const { _id } = jwt.verify(req.headers.refresh_token, config.JWT_SECRET);
+    const user = await User.findById(_id);
+
+    const token = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
+      expiresIn: '1h',
+    });
+    const refreshToken = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
+      expiresIn: '7d',
+    });
+
+    user.password = undefined;
+    user.resetCode = undefined;
+
+    return res.json({
+      token,
+      refreshToken,
+      user,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.send(403).json({ error: 'Refresh token failed' });
+  }
+};

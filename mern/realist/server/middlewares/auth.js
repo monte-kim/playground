@@ -1,5 +1,4 @@
-import { config } from 'aws-sdk';
-import { jwt } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../config.js';
 
 export const requireSignin = (req, res, next) => {
