@@ -7,6 +7,25 @@ import { emailTemplate } from '../helpers/email.js';
 import { hashPassword, comparePassword } from '../helpers/auth.js';
 import User from '../models/user.js';
 
+const tokenAndUserResponse = (req, res, user) => {
+  const token = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
+    expiresIn: '1h',
+  });
+  const refreshToken = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
+    expiresIn: '7d',
+  });
+
+  // 비밀번호 및 신규 비밀번호 생성 코드는 전달하지 않는다.
+  user.password = undefined;
+  user.resetCode = undefined;
+
+  return res.json({
+    token,
+    refreshToken,
+    user,
+  });
+};
+
 export const welcome = (req, res) => {
   res.json({
     data: 'Hello from Node.js api from routes.',
@@ -66,6 +85,11 @@ export const register = async (req, res) => {
     // console.log(req.body);
     const { email, password } = jwt.verify(req.body.token, config.JWT_SECRET);
 
+    const userExist = await User.findOne({ email });
+    if (userExist) {
+      return res.json({ error: 'Email is taken' });
+    }
+
     const hashedPassword = await hashPassword(password);
 
     const user = await new User({
@@ -74,22 +98,7 @@ export const register = async (req, res) => {
       password: hashedPassword,
     }).save();
 
-    const token = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
-      expiresIn: '1h',
-    });
-    const refreshToken = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
-      expiresIn: '7d',
-    });
-
-    // 비밀번호 및 신규 비밀번호 생성 코드는 전달하지 않는다.
-    user.password = undefined;
-    user.resetCode = undefined;
-
-    return res.json({
-      token,
-      refreshToken,
-      user,
-    });
+    tokenAndUserResponse(req, res, user);
   } catch (err) {
     console.log(err);
     return res.json({ error: 'Something went wrong. Try again.' });
@@ -109,23 +118,24 @@ export const login = async (req, res) => {
       return res.json({ error: 'Wrong password' });
     }
 
-    // 3. JWT 토큰 생성
-    const token = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
-      expiresIn: '1h',
-    });
-    const refreshToken = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
-      expiresIn: '7d',
-    });
+    // // 3. JWT 토큰 생성
+    // const token = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
+    //   expiresIn: '1h',
+    // });
+    // const refreshToken = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
+    //   expiresIn: '7d',
+    // });
 
-    // 4. 로그인 응답 보내기
-    user.password = undefined;
-    user.resetCode = undefined;
+    // // 4. 로그인 응답 보내기
+    // user.password = undefined;
+    // user.resetCode = undefined;
 
-    return res.json({
-      token,
-      refreshToken,
-      user,
-    });
+    // return res.json({
+    //   token,
+    //   refreshToken,
+    //   user,
+    // });
+    tokenAndUserResponse(req, res, user);
   } catch (err) {
     console.log(err);
     return res.json({ error: 'Something went wrong. Try again.' });
@@ -178,21 +188,7 @@ export const accessAccount = async (req, res) => {
 
     const user = await User.findOneAndUpdate({ resetCode }, { resetCode: '' });
 
-    const token = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
-      expiresIn: '1h',
-    });
-    const refreshToken = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
-      expiresIn: '7d',
-    });
-
-    user.password = undefined;
-    user.resetCode = undefined;
-
-    return res.json({
-      token,
-      refreshToken,
-      user,
-    });
+    tokenAndUserResponse(req, res, user);
   } catch (err) {
     console.log(err);
     return res.json({ error: 'Something went wrong. Try again.' });
@@ -204,21 +200,7 @@ export const refreshToken = async (req, res) => {
     const { _id } = jwt.verify(req.headers.refresh_token, config.JWT_SECRET);
     const user = await User.findById(_id);
 
-    const token = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
-      expiresIn: '1h',
-    });
-    const refreshToken = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
-      expiresIn: '7d',
-    });
-
-    user.password = undefined;
-    user.resetCode = undefined;
-
-    return res.json({
-      token,
-      refreshToken,
-      user,
-    });
+    tokenAndUserResponse(req, res, user);
   } catch (err) {
     console.log(err);
     return res.send(403).json({ error: 'Refresh token failed' });
