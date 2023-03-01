@@ -13,5 +13,6 @@ router.post('/login', authController.login); // 로그인
 router.post('/forgot-password', authController.forgotPassword);
 router.post('/access-account', authController.accessAccount);
 router.get('/refresh-token', authController.refreshToken);
+router.get('/current-user', requireSignin, authController.currentUser);
 
 export default router;
