@@ -1,7 +1,7 @@
 function App() {
   return (
     <div>
-      <h1>hello world from react</h1>
+      <h1 className='display-1 bg-primary text-light p-5'>App</h1>
     </div>
   );
 }
