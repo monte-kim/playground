@@ -250,3 +250,17 @@ export const updatePassword = async (req, res) => {
     return res.send(403).json({ error: 'Unauthorized' });
   }
 };
+
+export const updateProfile = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.user._id, req.body, { new: true });
+    user.password = undefined;
+    user.resetCode = undefined;
+    res.json(user);
+  } catch (err) {
+    if (err.codeName === 'DuplicateKey') {
+      return res.json({ error: 'Username / email is already taken.' });
+    }
+    return res.send(403).json({ error: 'Unauthorized' });
+  }
+};

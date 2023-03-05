@@ -16,5 +16,6 @@ router.get('/refresh-token', authController.refreshToken);
 router.get('/current-user', requireSignin, authController.currentUser);
 router.get('/profile/:username', authController.publicProfile);
 router.put('/update-password', requireSignin, authController.updatePassword);
+router.put('/update-profile', requireSignin, authController.updateProfile);
 
 export default router;
