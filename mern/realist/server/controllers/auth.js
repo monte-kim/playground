@@ -230,3 +230,23 @@ export const publicProfile = async (req, res) => {
     return res.json({ error: 'Uesr not found.' });
   }
 };
+
+export const updatePassword = async (req, res) => {
+  try {
+    const { password } = req.body;
+    if (!password) {
+      return res.json({ error: 'Password is required' });
+    } else if (password?.length < 6) {
+      return res.json({ error: 'Password should be minimum 6 characters' });
+    }
+
+    const user = await User.findByIdAndUpdate(req.user._id, {
+      password: await hashPassword(password),
+    });
+
+    return res.json({ ok: true });
+  } catch (err) {
+    console.log(err);
+    return res.send(403).json({ error: 'Unauthorized' });
+  }
+};
