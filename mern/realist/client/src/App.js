@@ -4,7 +4,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 
-function App() {
+const App = () => {
   return (
     <Routes>
       <Route path='/' element={<Home />} />
@@ -12,6 +12,6 @@ function App() {
       <Route path='/register' element={<Register />} />
     </Routes>
   );
-}
+};
 
 export default App;
