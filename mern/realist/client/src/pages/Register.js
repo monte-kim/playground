@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import axios from 'axios';
+
+import { API } from '../config.js';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -7,7 +10,9 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log({ email, password });
+      // console.log({ email, password });
+      const res = await axios.post(`${API}/pre-register`, { email, password });
+      console.log(res);
     } catch (err) {
       console.log(err);
     }
