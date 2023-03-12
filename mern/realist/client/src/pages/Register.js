@@ -12,11 +12,12 @@ const Register = () => {
     e.preventDefault();
     try {
       // console.log({ email, password });
-      const { data } = await axios.post(`${API}/pre-register`, { email, password });
+      const { data } = await axios.post(`/pre-register`, { email, password });
       if (data?.error) {
         toast.error(data.error);
+      } else {
+        toast.success('Please check your email to activate account.');
       }
-      toast.success('Please check your email to activate account.');
     } catch (err) {
       console.log(err);
       toast.error('Something went wrong. Try again.');
