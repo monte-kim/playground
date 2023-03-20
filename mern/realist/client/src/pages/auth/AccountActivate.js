@@ -14,24 +14,39 @@ export const AccountActivate = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (token) requestActivation();
-  }, [token]);
-
-  const requestActivation = async () => {
-    try {
-      const { data } = await axios.post('/register', { token });
-      if (data?.error) {
-        toast.error(data.error);
-      } else {
-        setAuth(data);
-        toast.success('Successfully logged in. Welcome to Realist app.');
-        navigate('/');
+    const requestActivation = async () => {
+      try {
+        const { data } = await axios.post('/register', { token });
+        if (data?.error) {
+          toast.error(data.error);
+        } else {
+          setAuth(data);
+          toast.success('Successfully logged in. Welcome to Realist app.');
+          navigate('/');
+        }
+      } catch (err) {
+        console.log(err);
+        toast.error('Something went wrong. Try again.');
       }
-    } catch (err) {
-      console.log(err);
-      toast.error('Something went wrong. Try again.');
-    }
-  };
+    };
+    if (token) requestActivation();
+  }, [token, setAuth, navigate]);
+
+  // const requestActivation = async () => {
+  //   try {
+  //     const { data } = await axios.post('/register', { token });
+  //     if (data?.error) {
+  //       toast.error(data.error);
+  //     } else {
+  //       setAuth(data);
+  //       toast.success('Successfully logged in. Welcome to Realist app.');
+  //       navigate('/');
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //     toast.error('Something went wrong. Try again.');
+  //   }
+  // };
 
   return (
     <div
