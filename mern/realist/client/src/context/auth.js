@@ -15,7 +15,11 @@ const AuthProvider = ({ children }) => {
   // axios 통신
   axios.defaults.baseURL = API;
 
-  return <AuthContext.Provider value={[auth, setAuth]}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={[auth, setAuth]}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 const useAuth = () => useContext(AuthContext);

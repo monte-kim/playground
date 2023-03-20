@@ -5,6 +5,7 @@ import Main from './components/nav/Main';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import { AccountActivate } from './pages/auth/AccountActivate';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+        <Route path='/auth/account-activate/:token' element={<AccountActivate />} />
       </Routes>
     </>
   );
