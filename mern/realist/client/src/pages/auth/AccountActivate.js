@@ -20,6 +20,11 @@ export const AccountActivate = () => {
         if (data?.error) {
           toast.error(data.error);
         } else {
+          // save in local storage
+          // 이렇게 하면 새로고침하더라도 로그인 상태가 유지된다.
+          localStorage.setItem('auth', JSON.stringify(data));
+
+          // save in context
           setAuth(data);
           toast.success('Successfully logged in. Welcome to Realist app.');
           navigate('/');
