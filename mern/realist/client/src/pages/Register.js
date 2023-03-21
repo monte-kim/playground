@@ -3,8 +3,6 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
-import { API } from '../config.js';
-
 const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -55,7 +53,10 @@ const Register = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <button disabled={loading} className='btn btn-primary col-12 mb-4'>
+              <button
+                disabled={loading}
+                className='btn btn-primary col-12 mb-4'
+              >
                 {loading ? 'Waiting...' : 'Register'}
               </button>
             </form>
