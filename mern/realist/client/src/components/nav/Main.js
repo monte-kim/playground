@@ -19,11 +19,23 @@ const Main = () => {
   const loggedIn =
     auth.user !== null && auth.token !== '' && auth.refreshToken !== '';
 
+  const handlePostAdClick = () => {
+    if (loggedIn) {
+      navigate('/ad/create');
+    } else {
+      navigate('/login');
+    }
+  };
+
   return (
     <nav className='nav d-flex justify-content-between lead'>
       <NavLink className='nav-link' aria-current='page' to='/'>
         Home
       </NavLink>
+
+      <a className='nav-link pointer' onClick={handlePostAdClick}>
+        Post Ad
+      </a>
 
       {/* 로그인 전이라면 로그인 및 회원가입 띄우기 */}
       {loggedIn ? (
