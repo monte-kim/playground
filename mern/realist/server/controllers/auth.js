@@ -154,7 +154,9 @@ export const forgotPassword = async (req, res) => {
       user.resetCode = resetCode;
       user.save();
 
-      const token = jwt.sign({ resetCode }, config.JWT_SECRET, { expiresIn: '1h' });
+      const token = jwt.sign({ resetCode }, config.JWT_SECRET, {
+        expiresIn: '1h',
+      });
 
       config.AWSSES.sendEmail(
         emailTemplate(
@@ -253,7 +255,9 @@ export const updatePassword = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.user._id, req.body, { new: true });
+    const user = await User.findByIdAndUpdate(req.user._id, req.body, {
+      new: true,
+    });
     user.password = undefined;
     user.resetCode = undefined;
     res.json(user);
