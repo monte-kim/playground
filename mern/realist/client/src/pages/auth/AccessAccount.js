@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import { useAuth } from '../../context/auth';
 
-export const AccountActivate = () => {
+export const AccessAccount = () => {
   // context
   const [auth, setAuth] = useAuth();
 
@@ -14,17 +14,19 @@ export const AccountActivate = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (token) requestActivation();
+    if (token) requestAccess();
   }, [token]);
 
-  const requestActivation = async () => {
+  const requestAccess = async () => {
     try {
-      const { data } = await axios.post('/register', { token });
+      const { data } = await axios.post('/access-account', {
+        resetCode: token,
+      });
       if (data?.error) {
         toast.error(data.error);
       } else {
         setAuth(data);
-        toast.success('Successfully logged in. Welcome to Realist app.');
+        toast.success('Please update your password in profile page.');
         navigate('/');
       }
     } catch (err) {
