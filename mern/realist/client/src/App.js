@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import { AccountActivate } from './pages/auth/AccountActivate';
+import ForgotPassword from './pages/auth/ForgotPassword';
 
 const App = () => {
   return (
@@ -16,7 +17,11 @@ const App = () => {
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
-        <Route path='/auth/account-activate/:token' element={<AccountActivate />} />
+        <Route path='/auth/forgot-password' element={<ForgotPassword />} />
+        <Route
+          path='/auth/account-activate/:token'
+          element={<AccountActivate />}
+        />
       </Routes>
     </>
   );

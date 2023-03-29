@@ -3,13 +3,8 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { useAuth } from '../context/auth.js';
-
-const Login = () => {
-  const [auth, setAuth] = useAuth();
-
+const ForgotPassword = () => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -19,13 +14,13 @@ const Login = () => {
     try {
       // console.log({ email, password });
       setLoading(true);
-      const { data } = await axios.post(`/login`, { email, password });
+      const { data } = await axios.post(`/forgot-password`, {
+        email,
+      });
       if (data?.error) {
         toast.error(data.error);
       } else {
-        setAuth(data);
-        localStorage.setItem('auth', JSON.stringify(data));
-        toast.success('Login successful.');
+        toast.success('Please check your email for password reset link.');
         navigate('/');
       }
     } catch (err) {
@@ -37,7 +32,7 @@ const Login = () => {
 
   return (
     <div>
-      <h1 className='display-1 bg-primary text-light p-5'>Login</h1>
+      <h1 className='display-1 bg-primary text-light p-5'>Forgot password</h1>
       <div className='container'>
         <div className='row'>
           <div className='col-lg-4 offset-lg-4'>
@@ -51,23 +46,15 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-              <input
-                type='password'
-                placeholder='Enter your password'
-                className='form-control mb-4'
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
               <button
                 disabled={loading}
                 className='btn btn-primary col-12 mb-4'
               >
-                {loading ? 'Waiting...' : 'Login'}
+                {loading ? 'Waiting...' : 'Submit'}
               </button>
             </form>
-            <Link className='text-danger' to='/auth/forgot-password'>
-              Forgot Password?
+            <Link className='text-danger' to='/login'>
+              Back to login
             </Link>
           </div>
         </div>
@@ -76,4 +63,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;
