@@ -7,6 +7,7 @@ import { emailTemplate } from '../helpers/email.js';
 import { hashPassword, comparePassword } from '../helpers/auth.js';
 import User from '../models/user.js';
 
+// generate token & refreshToken
 const tokenAndUserResponse = (req, res, user) => {
   const token = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
     expiresIn: '1h',
