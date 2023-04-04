@@ -25,7 +25,7 @@ const AdCreate = () => {
       <Sidebar />
       <div
         className='d-flex justify-content-center align-items-center vh-100'
-        style={{ marginTop: '-12%' }}
+        style={{ marginTop: '-14%' }}
       >
         <div className='col-lg-6'>
           <button
