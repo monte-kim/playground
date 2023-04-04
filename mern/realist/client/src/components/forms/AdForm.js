@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import GooglePlacesAutoComplete from 'react-google-places-autocomplete';
+import CurrencyInput from 'react-currency-input-field';
 
 import { GOOGLE_PLACES_KEY } from '../../config';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
@@ -35,6 +36,13 @@ const AdForm = ({ action, type }) => {
           }}
         />
       </div>
+
+      <CurrencyInput
+        placeholder='Enter price'
+        defaultValue={ad.price}
+        className='form-control mb-3'
+        onValueChange={(value) => setAd({ ...ad, price: value })}
+      />
 
       <pre>{JSON.stringify(ad, null, 4)}</pre>
     </>
