@@ -1,3 +1,6 @@
+import axios from 'axios';
+import Resizer from 'react-image-file-resizer';
+
 const ImageUpload = ({ ad, setAd }) => {
   const handleUpload = async (e) => {
     try {
@@ -6,6 +9,36 @@ const ImageUpload = ({ ad, setAd }) => {
       if (files?.length !== 0) {
         console.log(files);
         setAd({ ...ad, uploading: true });
+
+        files.map((file) => {
+          new Promise(() => {
+            Resizer.imageFileResizer(
+              file,
+              1080,
+              720,
+              'JPEG',
+              100,
+              0,
+              async (uri) => {
+                try {
+                  console.log('UPLOAD URI => ', uri);
+                  const { data } = await axios.post('/upload-image', {
+                    image: uri,
+                  });
+                  setAd((prev) => ({
+                    ...prev,
+                    photos: [data, ...prev.photos],
+                    uploading: false,
+                  }));
+                } catch (err) {
+                  console.log(err);
+                  setAd({ ...ad, uploading: false });
+                }
+              },
+              'base64',
+            );
+          });
+        });
       }
     } catch (err) {
       console.log(err);
