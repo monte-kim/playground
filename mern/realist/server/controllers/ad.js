@@ -34,3 +34,20 @@ export const uploadImage = async (req, res) => {
     res.json({ error: 'Upload failed. Try again.' });
   }
 };
+
+export const removeImage = (req, res) => {
+  try {
+    const { Key, Bucket } = req.body;
+
+    config.AWSS3.deleteObject({ Bucket, Key }, (err, data) => {
+      if (err) {
+        console.log(err);
+        res.sendStatus(400);
+      } else {
+        res.send({ ok: true });
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
