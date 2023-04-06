@@ -39,7 +39,7 @@ const AdForm = ({ action, type }) => {
       } else {
         toast.success('Ad created successfully');
         setAd({ ...ad, loading: false });
-        // navigate('/dashboard');
+        navigate('/dashboard');
       }
     } catch (err) {
       console.log(err);
@@ -121,8 +121,11 @@ const AdForm = ({ action, type }) => {
         onChange={(e) => setAd({ ...ad, description: e.target.value })}
       />
 
-      <button onClick={handleClick} className='btn btn-primary'>
-        Submit
+      <button
+        onClick={handleClick}
+        className={`btn btn-primary ${ad.loading ? 'disabled' : ''}`}
+      >
+        {ad.loading ? 'Saving...' : 'Submit'}
       </button>
 
       <pre>{JSON.stringify(ad, null, 4)}</pre>
