@@ -60,7 +60,7 @@ export const create = async (req, res) => {
     // console.log(req.body);
     const { photos, description, title, address, price, type, landsize } =
       req.body;
-    if (!photos) {
+    if (!photos.length) {
       return res.json({ error: 'Photos are required' });
     }
     if (!price) {
