@@ -1,5 +1,8 @@
 import * as config from '../config.js';
 import { nanoid } from 'nanoid';
+import slugify from 'slugify';
+import Ad from '../models/ad.js';
+import User from '../models/user.js';
 
 export const uploadImage = async (req, res) => {
   try {
@@ -48,6 +51,58 @@ export const removeImage = (req, res) => {
       }
     });
   } catch (err) {
+    console.log(err);
+  }
+};
+
+export const create = async (req, res) => {
+  try {
+    // console.log(req.body);
+    const { photos, description, title, address, price, type, landsize } =
+      req.body;
+    if (!photos) {
+      return res.json({ error: 'Photos are required' });
+    }
+    if (!price) {
+      return res.json({ error: 'Price are required' });
+    }
+    if (!type) {
+      return res.json({ error: 'Is property house or land?' });
+    }
+    if (!address) {
+      return res.json({ error: 'Address is required' });
+    }
+    if (!description) {
+      return res.json({ error: 'Description is required' });
+    }
+
+    const geo = await config.GOOGLE_GEOCODER.geocode(address);
+    // console.log('geo => ', geo);
+    const ad = await new Ad({
+      ...req.body,
+      postedBy: req.user._id,
+      location: {
+        type: 'Point',
+        coordinates: [geo?.[0]?.longitude, geo?.[0]?.latitude],
+      },
+      googleMap: geo,
+    }).save();
+
+    // 사용자가 광고를 업로드하면 판매자로 변경
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $addToSet: { role: 'Seller' },
+      },
+      { new: true },
+    );
+
+    user.password = undefined;
+    user.resetCode = undefined;
+
+    res.json({ ad, user });
+  } catch (err) {
+    res.json({ error: 'Something went wrong. Try again.' });
     console.log(err);
   }
 };
