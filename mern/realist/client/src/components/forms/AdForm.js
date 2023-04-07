@@ -71,32 +71,38 @@ const AdForm = ({ action, type }) => {
         onValueChange={(value) => setAd({ ...ad, price: value })}
       />
 
-      <input
-        type='number'
-        min='0'
-        className='form-control mb-3'
-        placeholder='Enter how many bedrooms'
-        value={ad.bedrooms}
-        onChange={(e) => setAd({ ...ad, bedrooms: e.target.value })}
-      />
+      {type === 'House' ? (
+        <>
+          <input
+            type='number'
+            min='0'
+            className='form-control mb-3'
+            placeholder='Enter how many bedrooms'
+            value={ad.bedrooms}
+            onChange={(e) => setAd({ ...ad, bedrooms: e.target.value })}
+          />
 
-      <input
-        type='number'
-        min='0'
-        className='form-control mb-3'
-        placeholder='Enter how many bathrooms'
-        value={ad.bathrooms}
-        onChange={(e) => setAd({ ...ad, bathrooms: e.target.value })}
-      />
+          <input
+            type='number'
+            min='0'
+            className='form-control mb-3'
+            placeholder='Enter how many bathrooms'
+            value={ad.bathrooms}
+            onChange={(e) => setAd({ ...ad, bathrooms: e.target.value })}
+          />
 
-      <input
-        type='number'
-        min='0'
-        className='form-control mb-3'
-        placeholder='Enter how many carparks'
-        value={ad.carpark}
-        onChange={(e) => setAd({ ...ad, carpark: e.target.value })}
-      />
+          <input
+            type='number'
+            min='0'
+            className='form-control mb-3'
+            placeholder='Enter how many carparks'
+            value={ad.carpark}
+            onChange={(e) => setAd({ ...ad, carpark: e.target.value })}
+          />
+        </>
+      ) : (
+        ''
+      )}
 
       <input
         type='text' //450sqm
