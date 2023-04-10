@@ -60,7 +60,7 @@ export const create = async (req, res) => {
     // console.log(req.body);
     const { photos, description, title, address, price, type, landsize } =
       req.body;
-    if (!photos.length) {
+    if (!photos?.length) {
       return res.json({ error: 'Photos are required' });
     }
     if (!price) {
@@ -77,7 +77,7 @@ export const create = async (req, res) => {
     }
 
     const geo = await config.GOOGLE_GEOCODER.geocode(address);
-    // console.log('geo => ', geo);
+    console.log('geo => ', geo);
     const ad = await new Ad({
       ...req.body,
       postedBy: req.user._id,
@@ -121,6 +121,34 @@ export const ads = async (req, res) => {
       .limit(12);
 
     res.json({ adsForSell, adsForRent });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const read = async (req, res) => {
+  try {
+    const ad = await Ad.findOne({ slug: req.params.slug }).populate(
+      'postedBy',
+      'name username email phone company photo.Location',
+    );
+
+    // related
+    const related = await Ad.find({
+      _id: { $ne: ad._id }, // not include myself(ad)
+      action: ad.action,
+      type: ad.type,
+      address: {
+        // $regex: ad.googleMap[0].administrativeLevels.level1short,
+        // $regex: ad.postedBy.username,
+        $regex: ad.googleMap[0].city,
+        $options: 'i',
+      },
+    })
+      .limit(3)
+      .select('-photos.Key -photos.key -photos.ETag -photos.Bucket -googleMap');
+    // console.log(ad, related);
+    res.json({ ad });
   } catch (err) {
     console.log(err);
   }

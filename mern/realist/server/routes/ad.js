@@ -9,5 +9,6 @@ router.post('/upload-image', requireSignin, adController.uploadImage);
 router.post('/remove-image', requireSignin, adController.removeImage);
 router.post('/ad', requireSignin, adController.create);
 router.get('/ads', adController.ads);
+router.get('/ad/:slug', adController.read);
 
 export default router;
