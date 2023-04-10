@@ -2,6 +2,7 @@ import { IoBedOutline } from 'react-icons/io5';
 import { TbBath } from 'react-icons/tb';
 import { BiArea } from 'react-icons/bi';
 import { Badge } from 'antd';
+import { Link } from 'react-router-dom';
 
 import './AdCard.css';
 
@@ -12,48 +13,50 @@ const AdCard = ({ ad }) => {
 
   return (
     <div className='col-lg-4 p-4 gx-4 gy-4'>
-      <Badge.Ribbon
-        text={`${ad?.type} for ${ad?.action}`}
-        color={`${ad?.action === 'Sell' ? 'green' : 'yellow'}`}
-      >
-        <div className='card hoverable shadow'>
-          <img
-            src={ad?.photos?.[0].Location}
-            alt={`${ad?.type}-${ad?.address}-${ad?.action}-${ad?.price}`}
-            style={{ height: '250px', objectFit: 'cover' }}
-          />
+      <Link to={`/ad/${ad.slug}`}>
+        <Badge.Ribbon
+          text={`${ad?.type} for ${ad?.action}`}
+          color={`${ad?.action === 'Sell' ? 'green' : 'yellow'}`}
+        >
+          <div className='card hoverable shadow'>
+            <img
+              src={ad?.photos?.[0].Location}
+              alt={`${ad?.type}-${ad?.address}-${ad?.action}-${ad?.price}`}
+              style={{ height: '250px', objectFit: 'cover' }}
+            />
 
-          <div className='card-body'>
-            <h3>${formatNumber(ad?.price)}</h3>
-            <p className='card-text' style={{ fontSize: '0.8rem' }}>
-              {ad?.address}
-            </p>
-            <p className='card-text d-flex justify-content-between'>
-              {ad?.bedrooms ? (
-                <span>
-                  <IoBedOutline /> {ad?.bedrooms}
-                </span>
-              ) : (
-                ''
-              )}
-              {ad?.bathrooms ? (
-                <span>
-                  <TbBath /> {ad?.bathrooms}
-                </span>
-              ) : (
-                ''
-              )}
-              {ad?.landsize ? (
-                <span>
-                  <BiArea /> {ad?.landsize}
-                </span>
-              ) : (
-                ''
-              )}
-            </p>
+            <div className='card-body'>
+              <h3>${formatNumber(ad?.price)}</h3>
+              <p className='card-text' style={{ fontSize: '0.8rem' }}>
+                {ad?.address}
+              </p>
+              <p className='card-text d-flex justify-content-between'>
+                {ad?.bedrooms ? (
+                  <span>
+                    <IoBedOutline /> {ad?.bedrooms}
+                  </span>
+                ) : (
+                  ''
+                )}
+                {ad?.bathrooms ? (
+                  <span>
+                    <TbBath /> {ad?.bathrooms}
+                  </span>
+                ) : (
+                  ''
+                )}
+                {ad?.landsize ? (
+                  <span>
+                    <BiArea /> {ad?.landsize}
+                  </span>
+                ) : (
+                  ''
+                )}
+              </p>
+            </div>
           </div>
-        </div>
-      </Badge.Ribbon>
+        </Badge.Ribbon>
+      </Link>
     </div>
   );
 };
