@@ -139,7 +139,7 @@ export const read = async (req, res) => {
       action: ad.action,
       type: ad.type,
       address: {
-        // $regex: ad.googleMap[0].administrativeLevels.level1short,
+        // $regex: ad.googleMap[0].administrativeLevels.level1long,
         // $regex: ad.postedBy.username,
         $regex: ad.googleMap[0].city,
         $options: 'i',
@@ -148,7 +148,7 @@ export const read = async (req, res) => {
       .limit(3)
       .select('-photos.Key -photos.key -photos.ETag -photos.Bucket -googleMap');
     // console.log(ad, related);
-    res.json({ ad });
+    res.json({ ad, related });
   } catch (err) {
     console.log(err);
   }
