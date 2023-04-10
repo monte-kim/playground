@@ -1,3 +1,5 @@
+import './AdCard.css';
+
 const AdCard = ({ ad }) => {
   return (
     <div className='col-lg-4 p-4 gx-4 gy-4'>
