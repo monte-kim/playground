@@ -1,10 +1,8 @@
-import { IoBedOutline } from 'react-icons/io5';
-import { TbBath } from 'react-icons/tb';
-import { BiArea } from 'react-icons/bi';
 import { Badge } from 'antd';
 import { Link } from 'react-router-dom';
 
 import './AdCard.css';
+import AdFeatures from './AdFeatures';
 
 const AdCard = ({ ad }) => {
   const formatNumber = (x) => {
@@ -30,29 +28,7 @@ const AdCard = ({ ad }) => {
               <p className='card-text' style={{ fontSize: '0.8rem' }}>
                 {ad?.address}
               </p>
-              <p className='card-text d-flex justify-content-between'>
-                {ad?.bedrooms ? (
-                  <span>
-                    <IoBedOutline /> {ad?.bedrooms}
-                  </span>
-                ) : (
-                  ''
-                )}
-                {ad?.bathrooms ? (
-                  <span>
-                    <TbBath /> {ad?.bathrooms}
-                  </span>
-                ) : (
-                  ''
-                )}
-                {ad?.landsize ? (
-                  <span>
-                    <BiArea /> {ad?.landsize}
-                  </span>
-                ) : (
-                  ''
-                )}
-              </p>
+              <AdFeatures ad={ad} />
             </div>
           </div>
         </Badge.Ribbon>

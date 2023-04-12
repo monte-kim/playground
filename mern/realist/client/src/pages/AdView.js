@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import ImageGallery from '../components/misc/ImageGallery';
 import Logo from '../logo.svg';
+import AdFeatures from '../components/cards/AdFeatures';
 
 const AdView = () => {
   // state
@@ -61,6 +62,7 @@ const AdView = () => {
               {ad?.sold ? '❌ Off market' : '✔ In market'}
             </div>
             <h1>{ad.address}</h1>
+            <AdFeatures ad={ad} />
           </div>
           <div className='col-lg-8'>
             <ImageGallery photos={generatePhotosArray(ad?.photos)} />
