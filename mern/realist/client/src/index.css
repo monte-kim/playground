@@ -6,3 +6,8 @@
 .pointer {
   cursor: pointer;
 }
+
+.react-photo-gallery--gallery img {
+  object-fit: cover;
+  max-height: 400px !important;
+}
