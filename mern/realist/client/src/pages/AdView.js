@@ -1,12 +1,19 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 import ImageGallery from '../components/misc/ImageGallery';
 import Logo from '../logo.svg';
 import AdFeatures from '../components/cards/AdFeatures';
 
+dayjs.extend(relativeTime);
+
 const AdView = () => {
+  const formatNumber = (x) => {
+    return x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
   // state
   const [ad, setAd] = useState({});
   const [related, setRelated] = useState([]);
@@ -63,6 +70,8 @@ const AdView = () => {
             </div>
             <h1>{ad.address}</h1>
             <AdFeatures ad={ad} />
+            <h3 className='mt-3 h2'>${formatNumber(ad.price)}</h3>
+            <p className='text-muted'>{dayjs(ad?.createdAt).fromNow()}</p>
           </div>
           <div className='col-lg-8'>
             <ImageGallery photos={generatePhotosArray(ad?.photos)} />
