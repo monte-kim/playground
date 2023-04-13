@@ -153,3 +153,37 @@ export const read = async (req, res) => {
     console.log(err);
   }
 };
+
+export const addToWishList = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $addToSet: { wishlist: req.body.adId },
+      },
+      { new: true },
+    );
+
+    const { password, resetCode, ...rest } = user._doc;
+    res.json(rest);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const removeFromWishList = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $pull: { wishlist: req.body.adId },
+      },
+      { new: true },
+    );
+
+    const { password, resetCode, ...rest } = user._doc;
+    res.json(rest);
+  } catch (err) {
+    console.log(err);
+  }
+};
