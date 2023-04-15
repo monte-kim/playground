@@ -9,5 +9,5 @@
 
 .react-photo-gallery--gallery img {
   object-fit: cover;
-  max-height: 400px !important;
+  height: 400px !important;
 }
