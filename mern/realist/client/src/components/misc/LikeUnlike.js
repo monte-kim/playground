@@ -13,7 +13,9 @@ const LikeUnlike = ({ ad }) => {
   const handleLike = async () => {
     try {
       if (auth.user === null) {
-        navigate('/login');
+        navigate('/login', {
+          state: `/ad/${ad.slug}`,
+        });
         return;
       }
       // set user data in Local Storage
