@@ -132,22 +132,20 @@ export const read = async (req, res) => {
       'postedBy',
       'name username email phone company photo.Location',
     );
-
+    console.log(ad.googleMap[0]?.extra.neighborhood);
     // related
     const related = await Ad.find({
       _id: { $ne: ad._id }, // not include myself(ad)
       action: ad.action,
       type: ad.type,
       address: {
-        // $regex: ad.googleMap[0].administrativeLevels.level1long,
-        // $regex: ad.postedBy.username,
-        $regex: ad.googleMap[0].city,
+        $regex: ad.googleMap[0]?.extra?.neighborhood || '',
         $options: 'i',
       },
     })
       .limit(3)
       .select('-photos.Key -photos.key -photos.ETag -photos.Bucket -googleMap');
-    // console.log(ad, related);
+    console.log('related: ', related[0]);
     res.json({ ad, related });
   } catch (err) {
     console.log(err);
