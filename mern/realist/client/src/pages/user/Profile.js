@@ -6,6 +6,7 @@ import slugify from 'slugify';
 
 import { useAuth } from '../../context/auth';
 import Sidebar from '../../components/nav/Sidebar';
+import ProfileUpload from '../../components/forms/ProfileUpload';
 
 const Profile = () => {
   // context
@@ -40,7 +41,8 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log({
+      setLoading(true);
+      const { data } = await axios.put('/update-profile', {
         username,
         name,
         email,
@@ -50,6 +52,18 @@ const Profile = () => {
         about,
         photo,
       });
+      if (data?.error) {
+        toast.error(data.error);
+      } else {
+        console.log('update profile response => ', data);
+        setAuth({ ...auth, user: data });
+
+        let fromLS = JSON.parse(localStorage.getItem('auth'));
+        fromLS.user = data;
+        localStorage.setItem('auth', JSON.stringify(fromLS));
+        setLoading(false);
+        toast.success('Profile updated');
+      }
     } catch (err) {
       console.log(err);
     }
@@ -63,6 +77,13 @@ const Profile = () => {
         <div className='container mt-2'>
           <div className='row'>
             <div className='col-lg-8  offset-lg-2 mt-2'>
+              <ProfileUpload
+                photo={photo}
+                setPhoto={setPhoto}
+                uploading={uploading}
+                setUploading={setUploading}
+              />
+
               <form onSubmit={handleSubmit}>
                 <input
                   type='text'
