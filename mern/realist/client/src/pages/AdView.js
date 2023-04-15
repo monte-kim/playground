@@ -11,6 +11,7 @@ import AdFeatures from '../components/cards/AdFeatures';
 import LikeUnlike from '../components/misc/LikeUnlike';
 import MapCard from '../components/cards/MapCard';
 import AdCard from '../components/cards/AdCard';
+import ContactSeller from '../components/forms/ContactSeller';
 
 dayjs.extend(relativeTime);
 
@@ -102,6 +103,10 @@ const AdView = () => {
             />
           </div>
         </div>
+      </div>
+
+      <div className='container'>
+        <ContactSeller ad={ad} />
       </div>
 
       <div className='container-fluid'>
