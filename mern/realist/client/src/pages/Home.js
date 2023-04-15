@@ -44,7 +44,7 @@ const Home = () => {
           ))}
         </div>
       </div>
-      <pre>{JSON.stringify({ adsForSell, adsForRent }, null, 4)}</pre>
+      {/* <pre>{JSON.stringify({ adsForSell, adsForRent }, null, 4)}</pre> */}
     </div>
   );
 };
