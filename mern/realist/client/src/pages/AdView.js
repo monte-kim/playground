@@ -8,6 +8,7 @@ import ImageGallery from '../components/misc/ImageGallery';
 import Logo from '../logo.svg';
 import AdFeatures from '../components/cards/AdFeatures';
 import LikeUnlike from '../components/misc/LikeUnlike';
+import MapCard from '../components/cards/MapCard';
 
 dayjs.extend(relativeTime);
 
@@ -82,7 +83,14 @@ const AdView = () => {
           </div>
         </div>
       </div>
-      <pre>{JSON.stringify({ ad, related }, null, 4)}</pre>
+
+      <div className='container mb-5'>
+        <div className='row'>
+          <div className='col-lg-8 offset-lg-2 mt-3'>
+            <MapCard ad={ad} />
+          </div>
+        </div>
+      </div>
     </>
   );
 };
