@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import HTMLRenderer from 'react-html-renderer';
 
 import ImageGallery from '../components/misc/ImageGallery';
 import Logo from '../logo.svg';
@@ -88,6 +89,16 @@ const AdView = () => {
         <div className='row'>
           <div className='col-lg-8 offset-lg-2 mt-3'>
             <MapCard ad={ad} />
+            <br />
+            <h1>
+              {ad?.type} in {ad?.address} for {ad?.action} ${ad?.price}
+            </h1>
+            <AdFeatures ad={ad} />
+            <hr />
+            <h3 className='fw-bld'>{ad?.title}</h3>
+            <HTMLRenderer
+              html={ad?.description?.replaceAll('.', '<br/><br/>')}
+            />
           </div>
         </div>
       </div>

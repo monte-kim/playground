@@ -120,7 +120,7 @@ const AdForm = ({ action, type }) => {
         onChange={(e) => setAd({ ...ad, title: e.target.value })}
       />
 
-      <input
+      <textarea
         className='form-control mb-3'
         placeholder='Enter description'
         value={ad.description}
