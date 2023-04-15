@@ -55,7 +55,6 @@ const Profile = () => {
       if (data?.error) {
         toast.error(data.error);
       } else {
-        console.log('update profile response => ', data);
         setAuth({ ...auth, user: data });
 
         let fromLS = JSON.parse(localStorage.getItem('auth'));
