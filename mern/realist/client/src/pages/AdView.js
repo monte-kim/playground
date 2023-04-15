@@ -7,6 +7,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import ImageGallery from '../components/misc/ImageGallery';
 import Logo from '../logo.svg';
 import AdFeatures from '../components/cards/AdFeatures';
+import LikeUnlike from '../components/misc/LikeUnlike';
 
 dayjs.extend(relativeTime);
 
@@ -62,9 +63,12 @@ const AdView = () => {
       <div className='container-fluid'>
         <div className='row mt-2'>
           <div className='col-lg-4'>
-            <button className='btn btn-primary disabled mt-5'>
-              {ad.type} for {ad.action}
-            </button>
+            <div className='d-flex justify-content-between'>
+              <button className='btn btn-primary disabled mt-2'>
+                {ad.type} for {ad.action}
+              </button>
+              <LikeUnlike ad={ad} />
+            </div>
             <div className='mt-4 mb-4'>
               {ad?.sold ? '❌ Off market' : '✔ In market'}
             </div>
