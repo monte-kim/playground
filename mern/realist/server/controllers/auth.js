@@ -60,11 +60,11 @@ export const preRegister = async (req, res) => {
       emailTemplate(
         email,
         `
-        <p>Please click the linnk below to activate your account.</p>
+        <p>Please click the link below to activate your account.</p>
         <a href="${config.CLIENT_URL}/auth/account-activate/${token}">Activate my account</a>
       `,
         config.REPLY_TO,
-        'Activ ate you account.',
+        'Activate you account.',
       ),
       (err, data) => {
         if (err) {
@@ -112,6 +112,10 @@ export const login = async (req, res) => {
 
     // 1. 이메일로 사용자 찾기
     const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.json({ error: 'No user found. Please register.' });
+    }
 
     // 2. 암호 대조
     const match = await comparePassword(password, user.password);

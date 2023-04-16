@@ -17,5 +17,6 @@ router.delete(
   requireSignin,
   adController.removeFromWishList,
 );
+router.post('/contact-seller', requireSignin, adController.contactSeller);
 
 export default router;
