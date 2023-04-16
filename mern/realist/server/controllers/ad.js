@@ -231,3 +231,24 @@ export const contactSeller = async (req, res) => {
     console.log(err);
   }
 };
+
+// 사용자가 업로드한 게시물 가져오기
+export const userAds = async (req, res) => {
+  try {
+    const perPage = 2;
+    const page = req.params.page ? req.params.page : 1;
+    const total = await Ad.find({ postedBy: req.user._id });
+    const ads = await Ad.find({ postedBy: req.user._id })
+      .select(
+        '-photos.key -photos.Key -photos.ETag -photos.Bucket -location -googleMap',
+      )
+      .populate('postedBy', 'name email username phone company')
+      .skip((page - 1) * perPage)
+      .limit(perPage)
+      .sort({ createdAt: -1 });
+
+    res.json({ ads, total: total.length });
+  } catch (err) {
+    console.log(err);
+  }
+};
