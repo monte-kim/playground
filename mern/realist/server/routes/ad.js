@@ -18,6 +18,6 @@ router.delete(
   adController.removeFromWishList,
 );
 router.post('/contact-seller', requireSignin, adController.contactSeller);
-router.get('/user-ads', requireSignin, adController.userAds);
+router.get('/user-ads/:page', requireSignin, adController.userAds);
 
 export default router;
