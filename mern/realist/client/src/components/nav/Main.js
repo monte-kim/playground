@@ -33,6 +33,14 @@ const Main = () => {
         Home
       </NavLink>
 
+      <NavLink className='nav-link' aria-current='page' to='/buy'>
+        Buy
+      </NavLink>
+
+      <NavLink className='nav-link' aria-current='page' to='/rent'>
+        Rent
+      </NavLink>
+
       <NavLink className='nav-link' aria-current='page' to='/agents'>
         Agents
       </NavLink>

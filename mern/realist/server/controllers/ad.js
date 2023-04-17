@@ -336,3 +336,30 @@ export const remove = async (req, res) => {
     console.log(err);
   }
 };
+
+export const adsForSell = async (req, res) => {
+  try {
+    const ads = await Ad.find({ action: 'Sell' })
+      .select('-googleMap -location -photo.Key -photo.key -photo.ETag')
+      .sort({ createdAt: -1 })
+      .limit(24);
+
+    console.log(ads);
+    res.json(ads);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const adsForRent = async (req, res) => {
+  try {
+    const ads = await Ad.find({ action: 'Rent' })
+      .select('-googleMap -location -photo.Key -photo.key -photo.ETag')
+      .sort({ createdAt: -1 })
+      .limit(24);
+    console.log(ads);
+    res.json(ads);
+  } catch (err) {
+    console.log(err);
+  }
+};
