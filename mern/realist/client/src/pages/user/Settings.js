@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-import Sidebar from '../../../components/nav/Sidebar';
+import Sidebar from '../../components/nav/Sidebar';
 
 const Settings = () => {
   //   state

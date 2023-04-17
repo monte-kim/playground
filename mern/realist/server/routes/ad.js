@@ -21,4 +21,7 @@ router.post('/contact-seller', requireSignin, adController.contactSeller);
 router.get('/user-ads/:page', requireSignin, adController.userAds);
 router.put('/ad/:_id', requireSignin, adController.update);
 
+router.get('/enquiries', requireSignin, adController.enquiredProperties);
+router.get('/wishlist', requireSignin, adController.wishlist);
+
 export default router;

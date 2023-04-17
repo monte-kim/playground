@@ -18,8 +18,10 @@ import RentLand from './pages/user/ad/RentLand';
 import AdView from './pages/AdView';
 import Footer from './components/nav/Footer';
 import Profile from './pages/user/Profile';
-import Settings from './pages/user/ad/Settings';
+import Settings from './pages/user/Settings';
 import AdEdit from './pages/user/ad/AdEdit';
+import Wishlist from './pages/user/Wishlist';
+import Enquiries from './pages/user/Enquiries';
 
 const App = () => {
   return (
@@ -45,6 +47,8 @@ const App = () => {
           <Route path='ad/create/rent/land' element={<RentLand />} />
           <Route path='user/profile' element={<Profile />} />
           <Route path='user/settings' element={<Settings />} />
+          <Route path='user/wishlist' element={<Wishlist />} />
+          <Route path='user/enquiries' element={<Enquiries />} />
           <Route path='user/ad/:slug' element={<AdEdit />} />
         </Route>
         <Route path='/ad/:slug' element={<AdView />} />
