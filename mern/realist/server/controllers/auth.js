@@ -6,6 +6,7 @@ import * as config from '../config.js';
 import { emailTemplate } from '../helpers/email.js';
 import { hashPassword, comparePassword } from '../helpers/auth.js';
 import User from '../models/user.js';
+import Ad from '../models/ad.js';
 
 // generate token & refreshToken
 const tokenAndUserResponse = (req, res, user) => {
@@ -271,5 +272,39 @@ export const updateProfile = async (req, res) => {
       return res.json({ error: 'Username / email is already taken.' });
     }
     return res.send(403).json({ error: 'Unauthorized' });
+  }
+};
+
+export const agents = async (req, res) => {
+  try {
+    const agents = await User.find({ role: 'Seller' }).select(
+      '-password -role -enquiredProperties -wishlist -photos.key -photos.Key -photo.Bucket',
+    );
+    res.json(agents);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const agentAdCount = async (req, res) => {
+  try {
+    const ads = await Ad.find({ postedBy: req.params._id }).select('_id');
+    res.json(ads);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const agent = async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.params.username }).select(
+      '-password -role -enquiredProperties -wishlist -photo.key -photo.Key -photo.Bucket',
+    );
+    const ads = await Ad.find({ postedBy: user._id }).select(
+      '-photos.key -photos.Key -photos.ETag -photos.Bucket -location -googleMap',
+    );
+    res.json({ user, ads });
+  } catch (err) {
+    console.log(err);
   }
 };
