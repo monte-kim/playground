@@ -134,7 +134,7 @@ const AdForm = ({ action, type }) => {
         {ad.loading ? 'Saving...' : 'Submit'}
       </button>
 
-      <pre>{JSON.stringify(ad, null, 4)}</pre>
+      {/* <pre>{JSON.stringify(ad, null, 4)}</pre> */}
     </>
   );
 };

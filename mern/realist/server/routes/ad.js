@@ -24,4 +24,6 @@ router.put('/ad/:_id', requireSignin, adController.update);
 router.get('/enquiries', requireSignin, adController.enquiredProperties);
 router.get('/wishlist', requireSignin, adController.wishlist);
 
+router.delete('/ad/:_id', requireSignin, adController.remove);
+
 export default router;
