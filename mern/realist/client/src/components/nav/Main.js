@@ -33,6 +33,10 @@ const Main = () => {
         Home
       </NavLink>
 
+      <NavLink className='nav-link' aria-current='page' to='/agents'>
+        Agents
+      </NavLink>
+
       <a className='nav-link pointer' onClick={handlePostAdClick}>
         Post Ad
       </a>

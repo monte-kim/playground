@@ -4,12 +4,14 @@ import CurrencyInput from 'react-currency-input-field';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { useAuth } from '../../context/auth';
 
 import { GOOGLE_PLACES_KEY } from '../../config';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import ImageUpload from './ImageUpload';
 
 const AdForm = ({ action, type }) => {
+  const [auth, setAuth] = useAuth();
   const [ad, setAd] = useState({
     photos: [],
     uploading: false,
@@ -37,9 +39,19 @@ const AdForm = ({ action, type }) => {
         toast.error(data.error);
         setAd({ ...ad, loading: false });
       } else {
+        // update user in context
+        setAuth({ ...auth, user: data.user });
+        // update user in local storage
+        const fromLS = JSON.parse(localStorage.getItem('auth'));
+        fromLS.user = data.user;
+        localStorage.setItem('auth', JSON.stringify(fromLS));
+
         toast.success('Ad created successfully');
         setAd({ ...ad, loading: false });
-        navigate('/dashboard');
+        // navigate('/dashboard');
+
+        // reload page on redirect
+        window.location.href = '/dashboard';
       }
     } catch (err) {
       console.log(err);
