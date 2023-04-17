@@ -23,6 +23,7 @@ import AdEdit from './pages/user/ad/AdEdit';
 import Wishlist from './pages/user/Wishlist';
 import Enquiries from './pages/user/Enquiries';
 import Agents from './pages/Agents';
+import Agent from './pages/Agent';
 
 const App = () => {
   return (
@@ -54,6 +55,7 @@ const App = () => {
         </Route>
         <Route path='/ad/:slug' element={<AdView />} />
         <Route path='/agents' element={<Agents />} />
+        <Route path='/agent/:username' element={<Agent />} />
       </Routes>
       <Footer />
     </>

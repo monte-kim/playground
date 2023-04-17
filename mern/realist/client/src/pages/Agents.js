@@ -25,6 +25,17 @@ const Agents = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div
+        className='d-flex justify-content-center align-items-center vh-100'
+        style={{ marginTop: '-10%' }}
+      >
+        <div className='display-1'>Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <h1 className='display-1 bg-primary text-light p-5'>Agents</h1>
