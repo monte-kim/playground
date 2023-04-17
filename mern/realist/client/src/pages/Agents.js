@@ -3,6 +3,7 @@ import { useAuth } from '../context/auth';
 import axios from 'axios';
 
 import AdCard from '../components/cards/AdCard';
+import UserCard from '../components/cards/UserCard';
 
 const Agents = () => {
   // state
@@ -30,7 +31,7 @@ const Agents = () => {
       <div className='container'>
         <div className='row'>
           {agents?.map((agent) => (
-            <h1>{agent.name}</h1>
+            <UserCard user={agent} key={agent._id} />
           ))}
         </div>
       </div>
