@@ -58,7 +58,7 @@ const Dashboard = () => {
           </div>
           <div className='row'>
             {ads?.map((ad) => (
-              <UserAdCard ad={ad} />
+              <UserAdCard ad={ad} key={ad._id} />
             ))}
           </div>
           {ads?.length < total ? (

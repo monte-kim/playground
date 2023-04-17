@@ -19,5 +19,6 @@ router.delete(
 );
 router.post('/contact-seller', requireSignin, adController.contactSeller);
 router.get('/user-ads/:page', requireSignin, adController.userAds);
+router.put('/ad/:_id', requireSignin, adController.update);
 
 export default router;

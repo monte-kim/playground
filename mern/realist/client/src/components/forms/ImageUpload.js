@@ -68,7 +68,7 @@ const ImageUpload = ({ ad, setAd }) => {
 
   return (
     <>
-      <label className='btn btn-secondary'>
+      <label className='btn btn-secondary mt-2'>
         {ad.uploading ? 'Processing...' : 'Upload photos'}
         <input
           onChange={handleUpload}
