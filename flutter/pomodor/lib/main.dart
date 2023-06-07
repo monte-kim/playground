@@ -16,7 +16,7 @@ class App extends StatelessWidget {
         backgroundColor: const Color(0xFFE7626C),
         textTheme: const TextTheme(
           displayLarge: TextStyle(
-            color: Colors.yellow,
+            color: Colors.green,
           ),
         ),
         cardColor: const Color(0xFFF4EDDB),
