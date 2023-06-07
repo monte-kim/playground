@@ -30,51 +30,112 @@ class _AppState extends State<App> {
     });
   }
 
+  bool showTitle = true;
+
+  void toggleTitle() {
+    setState(() {
+      showTitle = !showTitle;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        textTheme: const TextTheme(
+          titleLarge: TextStyle(color: Colors.green),
+        ),
+      ),
       home: Scaffold(
         backgroundColor: const Color(0xFFF4EDDB),
         body: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Click Counter",
-                    style: TextStyle(fontSize: 30),
-                  ),
-                  Text(
-                    "$counter",
-                    style: const TextStyle(fontSize: 30),
-                  ),
-                  IconButton(
-                    iconSize: 40,
-                    onPressed: onClicked,
-                    icon: const Icon(Icons.add_box_rounded),
-                  ),
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Click Counter2",
-                    style: TextStyle(fontSize: 30),
-                  ),
-                  for (var number in numbers) Text("$number"),
-                  IconButton(
-                    iconSize: 40,
-                    onPressed: onClicked2,
-                    icon: const Icon(Icons.add_box_rounded),
-                  ),
-                ],
-              ),
+              showTitle ? const MyLargeTitle() : const Text("nothing"),
+              IconButton(
+                  onPressed: toggleTitle,
+                  icon: const Icon(Icons.remove_red_eye))
             ],
           ),
+          // child: Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     Column(
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //       children: [
+          //         const Text(
+          //           "Click Counter",
+          //           style: TextStyle(fontSize: 30),
+          //         ),
+          //         Text(
+          //           "$counter",
+          //           style: const TextStyle(fontSize: 30),
+          //         ),
+          //         IconButton(
+          //           iconSize: 40,
+          //           onPressed: onClicked,
+          //           icon: const Icon(Icons.add_box_rounded),
+          //         ),
+          //       ],
+          //     ),
+          //     Column(
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //       children: [
+          //         const Text(
+          //           "Click Counter2",
+          //           style: TextStyle(fontSize: 30),
+          //         ),
+          //         for (var number in numbers) Text("$number"),
+          //         IconButton(
+          //           iconSize: 40,
+          //           onPressed: onClicked2,
+          //           icon: const Icon(Icons.add_box_rounded),
+          //         ),
+          //       ],
+          //     ),
+          //   ],
+          // ),
         ),
+      ),
+    );
+  }
+}
+
+class MyLargeTitle extends StatefulWidget {
+  const MyLargeTitle({
+    super.key,
+  });
+
+  @override
+  State<MyLargeTitle> createState() => _MyLargeTitleState();
+}
+
+class _MyLargeTitleState extends State<MyLargeTitle> {
+  int count = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // TODO: implement initState
+    print("initState!");
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    print("dispose!");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print("build!");
+    return Text(
+      "My Large Title",
+      style: TextStyle(
+        fontSize: 30,
+        color: Theme.of(context).textTheme.titleLarge!.color,
       ),
     );
   }
