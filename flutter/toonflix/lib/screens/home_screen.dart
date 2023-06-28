@@ -5,7 +5,7 @@ import 'package:toonflix/services/api_service.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-  Future<List<WebtoonModel>> webtoons = ApiService.getTodayToons();
+  final Future<List<WebtoonModel>> webtoons = ApiService.getTodayToons();
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +28,24 @@ class HomeScreen extends StatelessWidget {
         future: webtoons,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return const Text("there is data");
+            // return ListView(
+            //   children: [
+            //     for (var webtoon in snapshot.data!) Text(webtoon.title)
+            //   ],
+            // ); 섹션 별로 데이터를 로딩해야지 안 그러면 메모리 폭발
+            return ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                var webtoon = snapshot.data![index];
+                return Text(webtoon.title);
+              },
+              separatorBuilder: (context, index) => const SizedBox(width: 20),
+            );
           }
-          return const Text("Loading...");
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         },
       ),
     );
