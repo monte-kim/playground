@@ -1,10 +1,12 @@
 const fs = require('fs');
 const express = require('express');
+const morgan = require('morgan');
 
 const app = express();
 const port = 8080;
 
-// middlewares
+// MIDDLEWARES
+app.use(morgan('dev'));
 app.use(express.json());
 app.use((req, res, next) => {
   console.log('Hello from middleware');
@@ -19,6 +21,7 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
+// ROUTE HANDLERS
 const getAllTours = (req, res) => {
   res.status(200).json({
     status: 'success',
@@ -90,6 +93,38 @@ const deleteTour = (req, res) => {
   });
 };
 
+const getAllUsers = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'This route is not yet defined.',
+  });
+};
+const getUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'This route is not yet defined.',
+  });
+};
+const createUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'This route is not yet defined.',
+  });
+};
+const updateUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'This route is not yet defined.',
+  });
+};
+const deleteUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'This route is not yet defined.',
+  });
+};
+
+// ROUTES
 app.get('/api/v1/tours', getAllTours);
 // :variable
 // req.body는 클라이언트 측에서
@@ -101,6 +136,13 @@ app.post('/api/v1/tours', createTour);
 app.patch('/api/v1/tours/:id', updateTour);
 app.delete('/api/v1/tours/:id', deleteTour);
 
+app.get('/api/v1/users', getAllUsers);
+app.get('/api/v1/users/:id', getUser);
+app.post('/api/v1/users', createUser);
+app.patch('/api/v1/users/:id', updateUser);
+app.delete('/api/v1/users/:id', deleteUser);
+
+// START SERVER
 app.listen(port, () => {
   console.log(`App running on port ${port}.`);
 });
