@@ -3,6 +3,8 @@ const tourController = require('../controllers/tourController');
 
 const tourRouter = express.Router();
 
+tourRouter.param('id', tourController.checkID);
+
 tourRouter.get('/', tourController.getAllTours);
 // :variable
 // req.body는 클라이언트 측에서
@@ -10,7 +12,8 @@ tourRouter.get('/', tourController.getAllTours);
 // app.get('/api/v1/tours/:id/:a?/:b', (req, res) => {
 // 위 URL에서 ?는 optional parameter
 tourRouter.get('/:id', tourController.getTour);
-tourRouter.post('/', tourController.createTour);
+// middleware: tourController.checkBody
+tourRouter.post('/', tourController.checkBody, tourController.createTour);
 tourRouter.patch('/:id', tourController.updateTour);
 tourRouter.delete('/:id', tourController.deleteTour);
 
