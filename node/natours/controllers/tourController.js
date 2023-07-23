@@ -47,13 +47,20 @@ exports.getAllTours = async (req, res) => {
       query = query.select('-__v');
     }
 
+    // 4) pagination
+    const page = req.query.page * 1 || 1; // 페이지 번호
+    const limit = req.query.limit * 1 || 100; // 페이지 당 아이템 개수
+    const skip = (page - 1) * limit; // 현재 페이지 시작 아이템
+
+    if (req.query.page) {
+      const numTours = await Tour.countDocuments();
+      if (skip >= numTours) throw new Error('This page does not exist.');
+    }
+
+    query = query.skip(skip).limit(limit);
+
     // EXECUTE QUERY
     const tours = await query; // 이렇게 분리하는 것은 위에서 sorting, limiting 과 같은 다양한 함수를 요구에 따라 추가하기 위함
-    // const query = await Tour.find()
-    //   .where('duration')
-    //   .equals(5)
-    //   .where('difficulty')
-    //   .equals('easy');
 
     // SEND RESPONSE
     res.status(200).json({
