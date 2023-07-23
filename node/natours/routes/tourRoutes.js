@@ -5,6 +5,10 @@ const tourRouter = express.Router();
 
 // tourRouter.param('id', tourController.checkID);
 
+tourRouter
+  .route('/top-5-cheap')
+  .get(tourController.aliasTopTours, tourController.getAllTours);
+
 tourRouter.get('/', tourController.getAllTours);
 // :variable
 // req.body는 클라이언트 측에서
