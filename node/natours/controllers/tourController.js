@@ -28,30 +28,28 @@ class APIFeatures {
   }
 
   filter() {
-    const queryObj = { ...this.query };
-    const excludeFields = ['page', 'sort', 'limit', 'fields'];
-    excludeFields.forEach((el) => delete queryObj[el]);
+    const queryObject = { ...this.queryString };
+    const excludedField = ['page', 'sort', 'limit', 'fields'];
+    excludedField.forEach((el) => delete queryObject[el]);
+    // console.log(req.query, queryObject);
+    //1B) advanced filtering
 
-    // 1B) advanced filtering
-    let queryString = JSON.stringify(queryObj);
-    queryString = queryString.replace(
-      /\b(gte|gt|lte|lt)\b/g,
-      (match) => `$${match}`
-    );
+    let queryStr = JSON.stringify(queryObject);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
-    this.query = this.query.find(JSON.parse(queryString));
-
+    this.query = this.query.find(JSON.parse(queryStr));
+    //let query = Tour.find(JSON.parse(queryStr));
     return this;
   }
 
   sort() {
     if (this.queryString.sort) {
-      const sortBy = this.queryString.sort.split(',').join(' ');
+      const sortBy = this.queryString.split(',').join(' ');
+
       this.query = this.query.sort(sortBy);
     } else {
       this.query = this.query.sort('-createdAt');
     }
-
     return this;
   }
 
@@ -62,14 +60,13 @@ class APIFeatures {
     } else {
       this.query = this.query.select('-__v');
     }
-
     return this;
   }
 
   paginate() {
-    const page = this.queryString.page * 1 || 1; // 페이지 번호
-    const limit = this.queryString.limit * 1 || 100; // 페이지 당 아이템 개수
-    const skip = (page - 1) * limit; // 현재 페이지 시작 아이템
+    const page = this.queryString.page * 1 || 1;
+    const limit = this.queryString.limit * 1 || 100;
+    const skip = (page - 1) * limit;
 
     this.query = this.query.skip(skip).limit(limit);
 
