@@ -2,6 +2,12 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import app from './app.js';
 
+process.on('uncaughtException', (err) => {
+  console.log(err.name, err.message);
+  console.log('UNCAUGHT EXCEPTION 🚨\nshutting down...');
+  process.exit(1);
+});
+
 dotenv.config({ path: './config.env' });
 
 const DB = process.env.DATABASE.replace(
