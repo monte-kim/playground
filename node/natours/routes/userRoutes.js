@@ -8,6 +8,7 @@ const authController = new AuthController();
 const userRouter = Router();
 
 userRouter.post('/signup', authController.signup);
+userRouter.post('/login', authController.login);
 
 userRouter.get('/', userController.getAllUsers);
 userRouter.get('/:id', userController.getUser);
