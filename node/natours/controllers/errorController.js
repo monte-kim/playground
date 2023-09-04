@@ -1,4 +1,3 @@
-import { NODE_ENV } from '../config.js';
 import AppError from '../utils/appError.js';
 
 const handleCastErrorDB = (err) => {

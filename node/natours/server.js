@@ -10,8 +10,18 @@ const DB = process.env.DATABASE.replace(
 );
 mongoose.connect(DB).then(() => console.log('DB connection successful!'));
 
+console.log(`Server runs as "${process.env.NODE_ENV}" mode`);
+
 // START SERVER
 const port = process.env.PORT || 8080;
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`App running on port ${port}.`);
+});
+
+process.on('unhandledRejection', (err) => {
+  console.log(err.name, err.message);
+  console.log('UNHANDLER REJECTION 🚨\nshutting down...');
+  server.close(() => {
+    process.exit(1);
+  });
 });
