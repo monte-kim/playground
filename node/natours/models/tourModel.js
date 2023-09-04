@@ -1,7 +1,5 @@
-const mongoose = require('mongoose');
-// eslint-disable-next-line import/no-extraneous-dependencies
-const slugify = require('slugify');
-// const validator = require('validator');
+import mongoose from 'mongoose';
+import slugify from 'slugify';
 
 const tourSchema = new mongoose.Schema(
   {
@@ -133,4 +131,4 @@ tourSchema.pre('aggregate', function (next) {
 
 const Tour = mongoose.model('Tour', tourSchema);
 
-module.exports = Tour;
+export default Tour;

@@ -1,16 +1,23 @@
-const express = require('express');
-const morgan = require('morgan');
+import express from 'express';
+import morgan from 'morgan';
 
-const tourRouter = require('./routes/tourRoutes');
-const userRouter = require('./routes/userRoutes');
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+import { NODE_ENV } from './config.js';
+import tourRouter from './routes/tourRoutes.js';
+import userRouter from './routes/userRoutes.js';
 
 const app = express();
 
 // MIDDLEWARES
-if (process.env.NODE_ENV === 'development') {
+if (NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 app.use(express.json());
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 app.use(express.static(`${__dirname}/public`));
 
 // app.use((req, res, next) => {
@@ -32,4 +39,4 @@ app.all('*', (req, res, next) => {
   });
 });
 
-module.exports = app;
+export default app;

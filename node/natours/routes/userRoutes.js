@@ -1,9 +1,11 @@
-const express = require('express');
-const userController = require('../controllers/userController');
-const authController = require('../controllers/authController');
+import { Router } from 'express';
+import UserController from '../controllers/userController.js';
+import AuthController from '../controllers/authController.js';
 
+const userController = new UserController();
+const authController = new AuthController();
 // ROUTES
-const userRouter = express.Router();
+const userRouter = Router();
 
 userRouter.post('/signup', authController.signup);
 
@@ -13,4 +15,4 @@ userRouter.post('/', userController.createUser);
 userRouter.patch('/:id', userController.updateUser);
 userRouter.delete('/:id', userController.deleteUser);
 
-module.exports = userRouter;
+export default userRouter;

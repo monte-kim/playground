@@ -1,7 +1,8 @@
-const express = require('express');
-const tourController = require('../controllers/tourController');
+import { Router } from 'express';
+import TourController from '../controllers/tourController.js';
 
-const tourRouter = express.Router();
+const tourController = new TourController();
+const tourRouter = Router();
 
 // tourRouter.param('id', tourController.checkID);
 
@@ -25,4 +26,4 @@ tourRouter.get('/:id', tourController.getTour);
 tourRouter.patch('/:id', tourController.updateTour);
 tourRouter.delete('/:id', tourController.deleteTour);
 
-module.exports = tourRouter;
+export default tourRouter;
