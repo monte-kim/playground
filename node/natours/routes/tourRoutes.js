@@ -1,7 +1,9 @@
 import { Router } from 'express';
 import TourController from '../controllers/tourController.js';
+import AuthController from '../controllers/authController.js';
 
 const tourController = new TourController();
+const authController = new AuthController();
 const tourRouter = Router();
 
 // tourRouter.param('id', tourController.checkID);
@@ -12,12 +14,7 @@ tourRouter.get(
   tourController.getAllTours
 );
 
-tourRouter.get('/', tourController.getAllTours);
-// :variable
-// req.body는 클라이언트 측에서
-// req.params는 API URL에서 (여기서는 :id 가 들어감))
-// app.get('/api/v1/tours/:id/:a?/:b', (req, r es) => {
-// 위 URL에서 ?는 optional parameter
+tourRouter.get('/', authController.protect, tourController.getAllTours);
 tourRouter.get('/tour-stats', tourController.getTourStats);
 tourRouter.get('/monthly-plan/:year', tourController.getMonthlyPlan);
 tourRouter.post('/', tourController.createTour);
