@@ -5,7 +5,6 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
 import AppError from './utils/appError.js';
-import { NODE_ENV } from './config.js';
 import tourRouter from './routes/tourRoutes.js';
 import userRouter from './routes/userRoutes.js';
 import ErrorController from './controllers/errorController.js';
@@ -14,7 +13,7 @@ const app = express();
 const errorController = new ErrorController();
 
 // MIDDLEWARES
-if (NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 app.use(express.json());

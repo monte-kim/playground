@@ -45,9 +45,9 @@ export default class ErrorController {
     // console.log(err.stack);
     err.statusCode = err.statusCode || 500;
     err.status = err.status || 'error';
-    if (NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'development') {
       sendErrorDev(err, res);
-    } else if (NODE_ENV === 'production') {
+    } else if (process.env.NODE_ENV === 'production') {
       let error = { ...err };
       console.log(err);
       // mongoose errors
