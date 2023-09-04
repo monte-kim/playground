@@ -9,3 +9,7 @@ export default class AppError extends Error {
     Error.captureStackTrace(this, this.constructor);
   }
 }
+
+// 400: Bad request
+// 401: Not authenticated
+// 404: Not found API
