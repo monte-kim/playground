@@ -1,5 +1,6 @@
 import Tour from '../models/tourModel.js';
 import APIFeatures from '../utils/apiFeatures.js';
+import AppError from '../utils/appError.js';
 import catchAsync from '../utils/catchAsync.js';
 // const tours = JSON.parse(
 //   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
@@ -43,6 +44,10 @@ export default class TourController {
     const tour = await Tour.findById(req.params.id);
     // Tour.findOne({ _id: req.params.id });
 
+    if (!tour) {
+      return next(new AppError('No tour found with that ID', 404));
+    }
+
     res.status(200).json({
       status: 'success',
       data: { tour },
@@ -66,6 +71,11 @@ export default class TourController {
       new: true,
       runValidators: true,
     });
+
+    if (!tour) {
+      return next(new AppError('No tour found with that ID', 404));
+    }
+
     res.status(200).json({
       status: 'success',
       data: {
@@ -76,7 +86,12 @@ export default class TourController {
 
   deleteTour = catchAsync(async (req, res, next) => {
     // 삭제 관련 API에서는 클라이언트에게 다시 전송하는 데이터는 없음
-    await Tour.findByIdAndDelete(req.params.id);
+    const tour = await Tour.findByIdAndDelete(req.params.id);
+
+    if (!tour) {
+      return next(new AppError('No tour found with that ID', 404));
+    }
+
     res.status(204).json({
       status: 'success',
       data: null,
