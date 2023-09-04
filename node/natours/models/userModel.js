@@ -44,7 +44,7 @@ userSchema.pre('save', async function (next) {
   this.passwordConfirm = undefined;
   next();
 });
-userSchema.method.correctPassword = async function (
+userSchema.methods.correctPassword = async function (
   candidatePassword, // from req.body
   userPassword // from database
 ) {
