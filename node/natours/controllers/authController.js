@@ -1,3 +1,4 @@
+// import { promisify } from 'util';
 import jwt from 'jsonwebtoken';
 import User from '../models/userModel.js';
 import catchAsync from '../utils/catchAsync.js';
@@ -18,6 +19,7 @@ export default class AuthController {
       email: req.body.email,
       password: req.body.password,
       passwordConfirm: req.body.passwordConfirm,
+      passwordChangedAt: req.body.passwordChangedAt,
     });
     const token = signToken(newUser._id);
     res.status(201).json({
@@ -67,9 +69,30 @@ export default class AuthController {
         new AppError('You are not logged in. Please log in to get access', 401)
       );
     }
+
     // 2) Verify token
+    // const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // decoded =  { id: 'id 형태', iat: 8355, exp: 4755 }
+
     // 3) Check if user still exists
+    const userFound = await User.findById(decoded.id);
+    if (!userFound) {
+      return next(
+        new AppError('The token for this user no longer exists', 401)
+      );
+    }
+
     // 4) Check if user changed password after the token was issued
+    if (userFound.changedPasswordAfter(decoded.iat)) {
+      return next(
+        new AppError('User recently changed password. Please log in again', 401)
+      );
+    }
+
+    // To grant access to the protected route, we are simply setting the received user on the req object so req.user  and then we call next and this will take you to the next middleware in line which is the route handler itself as mentioned in the lesson. So now the user is granted the access to the protected route and then by calling next the same request (req) which has this user property attached to it is now funneled to the next middleware in line which is the route handler.
+    req.user = userFound; // 인증된 토큰을 가진 사용자 정보
+    // GRANT ACCESS TO PROTECTED ROUTE(위 모든 과정을 에러 없이 통과해야 다음 단계)
     next();
   });
 }
