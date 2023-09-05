@@ -21,6 +21,11 @@ tourRouter.post('/', tourController.createTour);
 
 tourRouter.get('/:id', tourController.getTour);
 tourRouter.patch('/:id', tourController.updateTour);
-tourRouter.delete('/:id', tourController.deleteTour);
+tourRouter.delete(
+  '/:id',
+  authController.protect,
+  authController.restrictTo('admin', 'lead-guide'),
+  tourController.deleteTour
+);
 
 export default tourRouter;

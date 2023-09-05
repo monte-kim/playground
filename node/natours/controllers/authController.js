@@ -20,6 +20,7 @@ export default class AuthController {
       password: req.body.password,
       passwordConfirm: req.body.passwordConfirm,
       passwordChangedAt: req.body.passwordChangedAt,
+      role: req.body.role,
     });
     const token = signToken(newUser._id);
     res.status(201).json({
@@ -95,4 +96,18 @@ export default class AuthController {
     // GRANT ACCESS TO PROTECTED ROUTE(위 모든 과정을 에러 없이 통과해야 다음 단계)
     next();
   });
+
+  // 미들웨어에 매개변수를 꼭 전달해야한다면 아래와 같이
+  restrictTo = (...roles) => {
+    return (req, res, next) => {
+      // roles = ...['admin', 'lead-guide], req.user.role = 'user'
+      if (!roles.includes(req.user.role)) {
+        return next(
+          new AppError('You do not have permission to perform this action', 403)
+        );
+      }
+
+      next();
+    };
+  };
 }

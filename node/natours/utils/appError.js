@@ -12,4 +12,5 @@ export default class AppError extends Error {
 
 // 400: Bad request
 // 401: Not authenticated
+// 403: Forbidden(권한 없음)
 // 404: Not found API
