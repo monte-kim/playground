@@ -12,6 +12,18 @@ const signToken = (id) => {
   });
 };
 
+const createAndSendToken = (user, statusCode, res) => {
+  const token = signToken(user._id);
+
+  res.status(statusCode).json({
+    status: 'success',
+    token,
+    data: {
+      user,
+    },
+  });
+};
+
 export default class AuthController {
   signup = catchAsync(async (req, res, next) => {
     // const newUser = await User.create(req.body);
@@ -24,14 +36,7 @@ export default class AuthController {
       passwordChangedAt: req.body.passwordChangedAt,
       role: req.body.role,
     });
-    const token = signToken(newUser._id);
-    res.status(201).json({
-      status: 'success',
-      token,
-      data: {
-        user: newUser,
-      },
-    });
+    createAndSendToken(newUser, 201, res);
   });
 
   login = catchAsync(async (req, res, next) => {
@@ -50,12 +55,7 @@ export default class AuthController {
     }
 
     // 3) if ok, send token to front
-    const token = signToken(user._id);
-
-    res.status(200).json({
-      status: 'success',
-      token,
-    });
+    createAndSendToken(user, 200, res);
   });
 
   protect = catchAsync(async (req, res, next) => {
@@ -94,7 +94,7 @@ export default class AuthController {
     }
 
     // To grant access to the protected route, we are simply setting the received user on the req object so req.user  and then we call next and this will take you to the next middleware in line which is the route handler itself as mentioned in the lesson. So now the user is granted the access to the protected route and then by calling next the same request (req) which has this user property attached to it is now funneled to the next middleware in line which is the route handler.
-    req.user = userFound; // 인증된 토큰을 가진 사용자 정보
+    req.user = userFound; // 인증된 토큰을 가진 사용자 정보를 req에 저장
     // GRANT ACCESS TO PROTECTED ROUTE(위 모든 과정을 에러 없이 통과해야 다음 단계)
     next();
   });
@@ -179,11 +179,26 @@ export default class AuthController {
 
     // 3) Update changePasswordAt property for the user
     // 4) Log the user in, send JWT
-    const token = signToken(user._id);
+    createAndSendToken(user, 200, res);
+  });
 
-    res.status(200).json({
-      status: 'success',
-      token,
-    });
+  updatePassword = catchAsync(async (req, res, next) => {
+    // 1) Get user from collection
+    const user = await User.findById(req.user.id).select('+password');
+
+    // 2) Check if POSTed current password is correct
+    if (
+      !(await user.correctPassword(req.body.currentPassword, user.password))
+    ) {
+      return next(new AppError('Your current password is wrong.', 401));
+    }
+
+    // 3) If so, update password
+    user.password = req.body.password;
+    user.passwordConfirm = req.body.passwordConfirm;
+    await user.save(); //findAndUpdate 안하는 이유: validator 내에서 this.password 와 같은 접근이 없음 -> 유효성 검사도 안 함
+
+    // 4) Log user in, send JWT
+    createAndSendToken(user, 200, res);
   });
 }

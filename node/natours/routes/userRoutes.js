@@ -11,6 +11,11 @@ userRouter.post('/signup', authController.signup);
 userRouter.post('/login', authController.login);
 userRouter.post('/forgotPassword', authController.forgotPassword);
 userRouter.patch('/resetPassword/:token', authController.resetPassword);
+userRouter.patch(
+  '/updatePassword',
+  authController.protect,
+  authController.updatePassword
+);
 
 userRouter.get('/', userController.getAllUsers);
 userRouter.get('/:id', userController.getUser);
