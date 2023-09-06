@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -38,6 +39,8 @@ const userSchema = new mongoose.Schema({
     },
   },
   passwordChangedAt: Date,
+  passwordResetToken: String,
+  passwordResetExpiresIn: Date,
 });
 
 userSchema.pre('save', async function (next) {
@@ -48,6 +51,12 @@ userSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, 12);
   // passwordConfirm은 확인됐으면 더 이상 필요하지 않아(DB에 저장할 필요 없음)
   this.passwordConfirm = undefined;
+  next();
+});
+userSchema.pre('save', function (next) {
+  if (!this.isModified('password') || this.isNew) return next();
+
+  this.passwordChangedAt = Date.now() - 1000; // 1초 앞당김으로써, JWT 생성 시간과 충돌을 예방
   next();
 });
 
@@ -71,6 +80,18 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
 
   // false === password not changed
   return false;
+};
+
+userSchema.methods.createPasswordResetToken = function () {
+  const resetToken = crypto.randomBytes(32).toString('hex');
+
+  this.passwordResetToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+
+  this.passwordResetExpiresIn = Date.now() + 10 * 60 * 1000; // 지금으로부터 10분(10 * 60초 * 1000ms)
+  return resetToken;
 };
 
 const User = mongoose.model('User', userSchema);
