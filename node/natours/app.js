@@ -1,5 +1,6 @@
 import express from 'express';
 import morgan from 'morgan';
+import rateLimit from 'express-rate-limit';
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -16,6 +17,14 @@ const errorController = new ErrorController();
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
+const limiter = rateLimit({
+  max: 100, // 100 requests from same IP
+  windowMs: 60 * 60 * 1000, // 1 hour(60m * 60s * 1000ms)
+  message: 'Too many requests from this IP, please try again in an hour!',
+});
+app.use('/api', limiter);
+
 app.use(express.json());
 
 const __filename = fileURLToPath(import.meta.url);
