@@ -1,6 +1,10 @@
 import express from 'express';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
+import helmet from 'helmet';
+import mongoSanitize from 'express-mongo-sanitize';
+import xss from 'xss-clean';
+import hpp from 'hpp';
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -11,13 +15,17 @@ import userRouter from './routes/userRoutes.js';
 import ErrorController from './controllers/errorController.js';
 
 const app = express();
-const errorController = new ErrorController();
 
-// MIDDLEWARES
+// 1. GLOBAL MIDDLEWARES
+// Security HTTP headers
+app.use(helmet());
+
+// Development logging
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
+// Limit requests from same API
 const limiter = rateLimit({
   max: 100, // 100 requests from same IP
   windowMs: 60 * 60 * 1000, // 1 hour(60m * 60s * 1000ms)
@@ -25,8 +33,30 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
-app.use(express.json());
+// Body parser, reading data from body into req.body
+app.use(express.json({ limit: '10kb' })); //larger than 10kb, it will not be accepted
 
+// Data sanitization against NoSQL query injection(ex: "$gt": "")
+app.use(mongoSanitize()); // gets rid of all the "$" and "." in the req.body
+
+// Data sanitization against XSS(이렇게 하면 html 태그 안에 악의적인 링크를 걸어서 사용자가 클릭 시 발동하도록 할 수 있음)
+app.use(xss()); // cleans any user input from malicious HTML code(ex: <script> -> &lt;script&gt;)
+
+// Prevent parameter pollution
+app.use(
+  hpp({
+    whitelist: [
+      'duration',
+      'ratingsQuantity',
+      'ratingsAverage',
+      'maxGroupSize',
+      'difficulty',
+      'price',
+    ], // allows duration to be duplicated in query string
+  })
+); // removes duplicate query strings(ex: ?sort=duration&sort=price) and only uses the last one
+
+// Serving static files(HTML in public folder)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 app.use(express.static(`${__dirname}/public`));
@@ -35,11 +65,14 @@ app.use(express.static(`${__dirname}/public`));
 //   console.log('Hello from middleware');
 //   next();
 // });
+
+// test, Request time log middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   next();
 });
 
+// 3. ROUTES
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 
@@ -55,6 +88,8 @@ app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server.`, 404));
 });
 
+// Global Error Handling Middleware
+const errorController = new ErrorController();
 app.use(errorController.globalErrorHandler);
 
 export default app;
