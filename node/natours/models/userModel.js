@@ -41,6 +41,11 @@ const userSchema = new mongoose.Schema({
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpiresIn: Date,
+  active: {
+    type: Boolean,
+    default: true,
+    select: false,
+  },
 });
 
 userSchema.pre('save', async function (next) {
@@ -57,6 +62,11 @@ userSchema.pre('save', function (next) {
   if (!this.isModified('password') || this.isNew) return next();
 
   this.passwordChangedAt = Date.now() - 1000; // 1초 앞당김으로써, JWT 생성 시간과 충돌을 예방
+  next();
+});
+userSchema.pre(/^find/, function (next) {
+  // (query middleware) this points to current query
+  this.find({ active: { $ne: false } });
   next();
 });
 
