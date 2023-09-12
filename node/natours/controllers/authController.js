@@ -1,12 +1,38 @@
 // import { promisify } from 'util';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 import User from '../models/userModel.js';
 import catchAsync from '../utils/catchAsync.js';
 import AppError from '../utils/appError.js';
+import sendEmail from '../utils/email.js';
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+};
+
+const createAndSendToken = (user, statusCode, res) => {
+  const token = signToken(user._id);
+  const cookieOptions = {
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+    ),
+    // secure: true,
+    httpOnly: true,
+  };
+  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+  res.cookie('jwt', token, cookieOptions);
+
+  // Remove password from the output
+  user.password = undefined;
+
+  res.status(statusCode).json({
+    status: 'success',
+    token,
+    data: {
+      user,
+    },
   });
 };
 
@@ -22,14 +48,7 @@ export default class AuthController {
       passwordChangedAt: req.body.passwordChangedAt,
       role: req.body.role,
     });
-    const token = signToken(newUser._id);
-    res.status(201).json({
-      status: 'success',
-      token,
-      data: {
-        user: newUser,
-      },
-    });
+    createAndSendToken(newUser, 201, res);
   });
 
   login = catchAsync(async (req, res, next) => {
@@ -48,12 +67,7 @@ export default class AuthController {
     }
 
     // 3) if ok, send token to front
-    const token = signToken(user._id);
-
-    res.status(200).json({
-      status: 'success',
-      token,
-    });
+    createAndSendToken(user, 200, res);
   });
 
   protect = catchAsync(async (req, res, next) => {
@@ -92,7 +106,7 @@ export default class AuthController {
     }
 
     // To grant access to the protected route, we are simply setting the received user on the req object so req.user  and then we call next and this will take you to the next middleware in line which is the route handler itself as mentioned in the lesson. So now the user is granted the access to the protected route and then by calling next the same request (req) which has this user property attached to it is now funneled to the next middleware in line which is the route handler.
-    req.user = userFound; // 인증된 토큰을 가진 사용자 정보
+    req.user = userFound; // 인증된 토큰을 가진 사용자 정보를 req에 저장
     // GRANT ACCESS TO PROTECTED ROUTE(위 모든 과정을 에러 없이 통과해야 다음 단계)
     next();
   });
@@ -110,4 +124,93 @@ export default class AuthController {
       next();
     };
   };
+
+  forgotPassword = catchAsync(async (req, res, next) => {
+    // 1) Get user based on POSTed email
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
+      return next(
+        new AppError('There is no user with this email address', 404)
+      );
+    }
+
+    // 2) Generate the random reset token
+    const resetToken = user.createPasswordResetToken();
+    // createPasswordResetToken은 업데이트가 아니기 때문에 한 번 저장해야함 + 유효성 검사 안 하고 저장
+    await user.save({ validateBeforeSave: false });
+
+    // 3) Send it to user's email
+    const resetURL = `${req.protocol}://${req.get(
+      'host'
+    )}/api/v1/users/resetPassword/${resetToken}`;
+    const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
+
+    try {
+      await sendEmail({
+        email: user.email,
+        subject: 'Your password reset token (valid for 10min)',
+        message,
+      });
+
+      res.status(200).json({
+        status: 'success',
+        message: 'Token sent to email',
+      });
+    } catch (err) {
+      user.passwordResetToken = undefined;
+      user.passwordResetExpiresIn = undefined;
+      await user.save({ validateBeforeSave: false });
+      return next(
+        new AppError('There was an error sending the email. Try again later!'),
+        500
+      );
+    }
+  });
+  resetPassword = catchAsync(async (req, res, next) => {
+    // 1) Get user based on the tokens
+    const hashedToken = crypto
+      .createHash('sha256')
+      .update(req.params.token)
+      .digest('hex');
+
+    const user = await User.findOne({
+      passwordResetToken: hashedToken,
+      passwordResetExpiresIn: { $gt: Date.now() },
+    });
+
+    // 2) If token has not expired, and there is user, set the new password
+    if (!user) {
+      return next(new AppError('Token is invalid or has expired'), 400);
+    }
+    user.password = req.body.password;
+    user.passwordConfirm = req.body.passwordConfirm;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpiresIn = undefined;
+    // save를 활용하는 이유는 모든 유효성 검사를 하기 위함(비밀번호는 유효성 검사 반드시 필요)
+    await user.save();
+
+    // 3) Update changePasswordAt property for the user
+    // 4) Log the user in, send JWT
+    createAndSendToken(user, 200, res);
+  });
+
+  updatePassword = catchAsync(async (req, res, next) => {
+    // 1) Get user from collection
+    const user = await User.findById(req.user.id).select('+password');
+
+    // 2) Check if POSTed current password is correct
+    if (
+      !(await user.correctPassword(req.body.currentPassword, user.password))
+    ) {
+      return next(new AppError('Your current password is wrong.', 401));
+    }
+
+    // 3) If so, update password
+    user.password = req.body.password;
+    user.passwordConfirm = req.body.passwordConfirm;
+    await user.save(); //findAndUpdate 안하는 이유: validator 내에서 this.password 와 같은 접근이 없음 -> 유효성 검사도 안 함
+
+    // 4) Log user in, send JWT
+    createAndSendToken(user, 200, res);
+  });
 }
