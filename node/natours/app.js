@@ -36,11 +36,11 @@ app.use('/api', limiter);
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' })); //larger than 10kb, it will not be accepted
 
-// Data sanitization against NoSQL query injection(ex: "$gt": "")
-app.use(mongoSanitize()); // gets rid of all the "$" and "." in the req.body
-
 // Data sanitization against XSS(이렇게 하면 html 태그 안에 악의적인 링크를 걸어서 사용자가 클릭 시 발동하도록 할 수 있음)
 app.use(xss()); // cleans any user input from malicious HTML code(ex: <script> -> &lt;script&gt;)
+
+// Data sanitization against NoSQL query injection(ex: "$gt": "")
+app.use(mongoSanitize()); // gets rid of all the "$" and "." in the req.body
 
 // Prevent parameter pollution
 app.use(
