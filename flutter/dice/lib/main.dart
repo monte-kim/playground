@@ -4,9 +4,13 @@ import 'package:dice/gradient_container.dart';
 
 void main() {
   runApp(
-    const MaterialApp(
+    MaterialApp(
       home: Scaffold(
-        body: GradientContainer(),
+        body: GradientContainer(colors: const [
+          Color.fromARGB(255, 16, 25, 81),
+          // Colors.white,
+          Color.fromARGB(255, 106, 0, 125),
+        ]),
       ),
     ),
   );
