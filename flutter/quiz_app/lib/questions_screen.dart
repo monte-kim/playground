@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:quiz_app/answer_button.dart';
+import '../data/questions.dart';
+
 class QuestionsScreen extends StatefulWidget {
   const QuestionsScreen({super.key});
 
@@ -12,33 +15,33 @@ class QuestionsScreen extends StatefulWidget {
 class _QuestionsScreenState extends State<QuestionsScreen> {
   @override
   Widget build(BuildContext context) {
+    final currentQuestion = questions[0];
+
     return SizedBox(
       width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text(
-            'Question 1',
-            style: TextStyle(color: Colors.white, fontSize: 28),
-          ),
-          const SizedBox(height: 30),
-          ElevatedButton(
-            onPressed: () {},
-            child: const Text('Answer'),
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            child: const Text('Answer'),
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            child: const Text('Answer'),
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            child: const Text('Answer'),
-          ),
-        ],
+      child: Container(
+        margin: const EdgeInsets.all(40),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              currentQuestion.question,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 30),
+            ...currentQuestion.getShuffledAnswers().map((answer) {
+              return AnswerButton(
+                answerText: answer,
+                onTapAnswer: () {},
+              );
+            }),
+          ],
+        ),
       ),
     );
   }
