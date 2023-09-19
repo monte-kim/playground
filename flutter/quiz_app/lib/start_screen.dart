@@ -22,7 +22,7 @@ class StartScreen extends StatelessWidget {
             "Learn Flutter the fun way!",
             style: GoogleFonts.kanit(
               color: Colors.white,
-              fontSize: 32,
+              fontSize: 28,
               fontWeight: FontWeight.bold,
             ),
           ),
