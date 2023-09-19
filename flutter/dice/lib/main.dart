@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:dice/gradient_container.dart';
 
 void main() {
-  print("Hello, Monte!");
+  // print("Hello, Monte!");
   runApp(const MyApp());
 }
 

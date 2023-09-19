@@ -8,6 +8,7 @@ import 'package:dice/dice_roller.dart';
 const Alignment beginAlignment = Alignment.topLeft;
 const Alignment endAlignment = Alignment.bottomRight;
 
+// ignore: must_be_immutable
 class GradientContainer extends StatelessWidget {
   GradientContainer({super.key, required this.colors});
   // const GradientContainer(this.colors, {super.key});
@@ -18,7 +19,7 @@ class GradientContainer extends StatelessWidget {
 
   void rollDice() {
     activeDiceImage = 'assets/images/dice-5.png';
-    print('changeeeee');
+    // print('changeeeee');
   }
 
   @override
