@@ -13,6 +13,7 @@ class Quiz extends StatefulWidget {
 
 class _QuizState extends State<Quiz> {
   // Widget? activeScreen;
+  var selectedAnswer = '';
   var activeScreen = 'start-screen';
 
   // @override
