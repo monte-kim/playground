@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
 
-final dateFormatter = DateFormat.yMMMMd();
+final dateFormatter = DateFormat.yMMMd();
 
 const uuid = Uuid();
 
