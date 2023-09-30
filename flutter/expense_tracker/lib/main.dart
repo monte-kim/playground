@@ -7,11 +7,11 @@ void main() {
 }
 
 var kColorScheme =
-    ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 132, 255, 0));
+    ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 153, 0, 255));
 
 var kDarkColorScheme = ColorScheme.fromSeed(
   brightness: Brightness.dark,
-  seedColor: const Color.fromARGB(255, 23, 67, 3),
+  seedColor: const Color.fromARGB(255, 42, 0, 101),
 );
 
 class ExpenseTracker extends StatelessWidget {
@@ -71,7 +71,7 @@ class ExpenseTracker extends StatelessWidget {
             ),
       ),
       // copyWith(): 모든 것은 default 값으로 하되, 내가 설정한 것만 수정
-      themeMode: ThemeMode.system, // default
+      themeMode: ThemeMode.dark, // default
       home: const Expenses(),
     );
   }
