@@ -92,7 +92,8 @@ class _NewExpenseState extends State<NewExpense> {
           ),
           Row(
             children: [
-              Expanded(
+              SizedBox(
+                width: 130,
                 child: TextField(
                   controller: _amountController,
                   keyboardType: TextInputType.number,
@@ -102,7 +103,7 @@ class _NewExpenseState extends State<NewExpense> {
                   ),
                 ),
               ),
-              const SizedBox(width: 40),
+              const SizedBox(width: 20),
               Expanded(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
