@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:expense_tracker/widgets/expenses.dart';
 
 void main() {
-  runApp(const ExpenseTracker());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]).then((fn) {
+    runApp(const ExpenseTracker());
+  });
 }
 
 var kColorScheme =
