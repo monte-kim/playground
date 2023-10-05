@@ -4,9 +4,9 @@ import 'package:meals/screens/meal_details.dart';
 import 'package:meals/widgets/meal_item.dart';
 
 class MealsScreen extends StatelessWidget {
-  const MealsScreen({super.key, required this.title, required this.meals});
+  const MealsScreen({super.key, this.title, required this.meals});
 
-  final String title;
+  final String? title;
   final List<Meal> meals;
 
   void selectMeal(BuildContext context, Meal meal) {
@@ -16,40 +16,47 @@ class MealsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
+    Widget content = Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            "Nothing here.",
+            style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.onBackground,
+                ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Try selecting a different category.',
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.onBackground,
+                ),
+          )
+        ],
       ),
-      body: meals.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "Nothing here.",
-                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.onBackground,
-                        ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Try selecting a different category.',
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.onBackground,
-                        ),
-                  )
-                ],
-              ),
-            )
-          : ListView.builder(
-              itemBuilder: (ctx, index) => MealItem(
-                meal: meals[index],
-                onSelectMeal: (meal) {
-                  selectMeal(context, meal);
-                },
-              ),
-              itemCount: meals.length,
-            ),
     );
+
+    if (meals.isNotEmpty) {
+      content = ListView.builder(
+        itemBuilder: (ctx, index) => MealItem(
+          meal: meals[index],
+          onSelectMeal: (meal) {
+            selectMeal(context, meal);
+          },
+        ),
+        itemCount: meals.length,
+      );
+    }
+
+    if (title == null) {
+      return content;
+    }
+
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(title!),
+        ),
+        body: content);
   }
 }
