@@ -24,10 +24,10 @@ class MealDetailsScreen extends ConsumerWidget {
         actions: [
           IconButton(
             onPressed: () {
-              // not ref.watch()
               final isFavorite = ref
                   .read(favoritMealsProvider.notifier)
                   .toggleMealFavoriteStatus(meal);
+
               ScaffoldMessenger.of(context).clearSnackBars();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -39,19 +39,38 @@ class MealDetailsScreen extends ConsumerWidget {
                 ),
               );
             },
-            icon: Icon(
-                isFavorite ? Icons.star : Icons.star_border_purple500_outlined),
+            icon: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 1000),
+              // reverseDuration: const Duration(milliseconds: 0),
+              transitionBuilder: (child, animation) {
+                return AnimatedCrossFade(
+                  duration: const Duration(milliseconds: 100),
+                  firstChild: const Icon(Icons.star),
+                  secondChild: const Icon(Icons.star_border_purple500_outlined),
+                  crossFadeState: isFavorite
+                      ? CrossFadeState.showFirst
+                      : CrossFadeState.showSecond,
+                );
+              },
+              child: Icon(
+                isFavorite ? Icons.star : Icons.star_border_purple500_outlined,
+                // key: ValueKey<bool>(isFavorite),
+              ),
+            ),
           )
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Image.network(
-              meal.imageUrl,
-              height: 300,
-              width: double.infinity,
-              fit: BoxFit.cover,
+            Hero(
+              tag: meal.id,
+              child: Image.network(
+                meal.imageUrl,
+                height: 300,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
             ),
             const SizedBox(
               height: 16,
