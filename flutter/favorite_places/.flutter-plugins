@@ -2,7 +2,12 @@
 file_selector_linux=/Users/taehwan/.pub-cache/hosted/pub.dev/file_selector_linux-0.9.2+1/
 file_selector_macos=/Users/taehwan/.pub-cache/hosted/pub.dev/file_selector_macos-0.9.3+3/
 file_selector_windows=/Users/taehwan/.pub-cache/hosted/pub.dev/file_selector_windows-0.9.3+1/
+flutter_config=/Users/taehwan/.pub-cache/hosted/pub.dev/flutter_config-2.0.2/
 flutter_plugin_android_lifecycle=/Users/taehwan/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.16/
+google_maps_flutter=/Users/taehwan/.pub-cache/hosted/pub.dev/google_maps_flutter-2.5.0/
+google_maps_flutter_android=/Users/taehwan/.pub-cache/hosted/pub.dev/google_maps_flutter_android-2.5.1/
+google_maps_flutter_ios=/Users/taehwan/.pub-cache/hosted/pub.dev/google_maps_flutter_ios-2.3.2/
+google_maps_flutter_web=/Users/taehwan/.pub-cache/hosted/pub.dev/google_maps_flutter_web-0.5.4+2/
 image_picker=/Users/taehwan/.pub-cache/hosted/pub.dev/image_picker-1.0.4/
 image_picker_android=/Users/taehwan/.pub-cache/hosted/pub.dev/image_picker_android-0.8.8+1/
 image_picker_for_web=/Users/taehwan/.pub-cache/hosted/pub.dev/image_picker_for_web-3.0.1/
