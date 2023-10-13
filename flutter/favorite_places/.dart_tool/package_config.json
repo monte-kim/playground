@@ -392,6 +392,18 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "sqflite",
+      "rootUri": "file:///Users/taehwan/.pub-cache/hosted/pub.dev/sqflite-2.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "sqflite_common",
+      "rootUri": "file:///Users/taehwan/.pub-cache/hosted/pub.dev/sqflite_common-2.5.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "stack_trace",
       "rootUri": "file:///Users/taehwan/.pub-cache/hosted/pub.dev/stack_trace-1.11.0",
       "packageUri": "lib/",
@@ -418,6 +430,12 @@
     {
       "name": "string_scanner",
       "rootUri": "file:///Users/taehwan/.pub-cache/hosted/pub.dev/string_scanner-1.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "synchronized",
+      "rootUri": "file:///Users/taehwan/.pub-cache/hosted/pub.dev/synchronized-3.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -476,7 +494,7 @@
       "languageVersion": "3.1"
     }
   ],
-  "generated": "2023-10-13T04:27:00.655603Z",
+  "generated": "2023-10-13T12:58:08.554353Z",
   "generator": "pub",
   "generatorVersion": "3.1.2"
 }

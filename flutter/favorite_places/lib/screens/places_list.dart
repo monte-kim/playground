@@ -27,8 +27,10 @@ class PlaceListScreen extends ConsumerWidget {
           )
         ],
       ),
-      body: PlacesList(
-        places: userPlaces,
+      body: FutureBuilder(
+        child: PlacesList(
+          places: userPlaces,
+        ),
       ),
     );
   }
