@@ -1,19 +1,30 @@
-const fs = require('fs');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
+import fs from 'fs';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import Tour from '../../models/tourModel.js';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-import { DATABASE, DATABASE_PASSWORD } from '../../config';
-const Tour = require('../../models/tourModel');
+// const fs = require('fs');
+// const mongoose = require('mongoose');
+// const dotenv = require('dotenv');
+
+// import { DATABASE, DATABASE_PASSWORD } from '../../config';
+// const Tour = require('../../models/tourModel');
+// const { DATABASE, DATABASE_PASSWORD } = require('../../config');
 
 dotenv.config({ path: './config.env' });
 
-const DB = DATABASE.replace('<PASSWORD>', DATABASE_PASSWORD);
+const DB = process.env.DATABASE.replace(
+  '<PASSWORD>',
+  process.env.DATABASE_PASSWORD
+);
 mongoose.connect(DB).then(() => console.log('DB connection successful!'));
 
 // READ JSON FILE
-const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/tours-simple.json`, 'utf-8')
-);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const tours = JSON.parse(fs.readFileSync(`${__dirname}/tours.json`, 'utf-8'));
 
 // IMPORT DATA INTO DB
 const importData = async () => {
