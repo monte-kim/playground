@@ -8,12 +8,16 @@ process.on('uncaughtException', (err) => {
   process.exit(1);
 });
 
+// import crypto from 'crypto';
+// const generateRandomString = (length) => {
+//   return crypto.randomBytes(length).toString('hex');
+// };
+// const JWT_SECRET_KEY = generateRandomString(32);
+
 dotenv.config({ path: './config.env' });
 
-const DB = process.env.DATABASE.replace(
-  '<PASSWORD>',
-  process.env.DATABASE_PASSWORD
-);
+const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
+
 mongoose.connect(DB).then(() => console.log('DB connection successful!'));
 
 console.log(`Server runs as "${process.env.NODE_ENV}" mode`);
