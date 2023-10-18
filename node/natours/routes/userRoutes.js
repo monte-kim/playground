@@ -13,32 +13,20 @@ userRouter.post('/signup', authController.signup);
 userRouter.post('/login', authController.login);
 userRouter.post('/forgotPassword', authController.forgotPassword);
 userRouter.patch('/resetPassword/:token', authController.resetPassword);
-userRouter.patch(
-  '/updatePassword',
-  authController.protect,
-  authController.updatePassword
-);
-userRouter.patch('/updateMe', authController.protect, userController.updateMe);
-userRouter.delete('/deleteMe', authController.protect, userController.deleteMe);
 
-userRouter.get(
-  '/me',
-  authController.protect,
-  userController.getMe, // getMe is a middleware that sets req.params.id = req.user.id
-  userController.getUser
-);
+userRouter.use(authController.protect);
+userRouter.patch('/updatePassword', authController.updatePassword);
+userRouter.patch('/updateMe', userController.updateMe);
+userRouter.delete('/deleteMe', userController.deleteMe);
+
+// getMe is a middleware that sets req.params.id = req.user.id
+userRouter.get('/me', userController.getMe, userController.getUser);
+
+userRouter.use(authController.restrictTo('admin'));
 userRouter.get('/', userController.getAllUsers);
-userRouter.get('/:id', userController.getUser);
 userRouter.post('/', userController.createUser);
-userRouter.patch(
-  '/:id',
-  // authController.restrictTo('admin'),
-  userController.updateUser
-);
-userRouter.delete(
-  '/:id',
-  // authController.restrictTo('admin'),
-  userController.deleteUser
-);
+userRouter.get('/:id', userController.getUser);
+userRouter.patch('/:id', userController.updateUser);
+userRouter.delete('/:id', userController.deleteUser);
 
 export default userRouter;
