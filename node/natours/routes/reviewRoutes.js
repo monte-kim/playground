@@ -5,9 +5,22 @@ import AuthController from '../controllers/authController.js';
 
 const authController = new AuthController();
 const reviewController = new ReviewController();
-const reviewRouter = Router();
+// mergeParams allows us to access the tourId from the tour router
+const reviewRouter = Router({ mergeParams: true });
+
+// POST /tour/234fad4/reviews
+// GET /reviews
 
 reviewRouter.get('/', reviewController.getAllReviews);
-reviewRouter.post('/', authController.protect, authController.restrictTo('user'), reviewController.createReview);
+reviewRouter.get('/:id', reviewController.getReview);
+reviewRouter.post(
+  '/',
+  authController.protect,
+  authController.restrictTo('user'),
+  reviewController.setTourUserIds,
+  reviewController.createReview
+);
+reviewRouter.delete('/:id', reviewController.deleteReview);
+reviewRouter.patch('/:id', reviewController.updateReview);
 
 export default reviewRouter;

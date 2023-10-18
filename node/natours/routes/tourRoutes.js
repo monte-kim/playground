@@ -1,10 +1,16 @@
 import { Router } from 'express';
 import TourController from '../controllers/tourController.js';
 import AuthController from '../controllers/authController.js';
+import ReviewController from '../controllers/reviewController.js';
+import reviewRouter from './reviewRoutes.js';
 
 const tourController = new TourController();
-const authController = new AuthController();
 const tourRouter = Router();
+
+const authController = new AuthController();
+const reviewController = new ReviewController();
+
+tourRouter.use('/:tourId/reviews', reviewRouter);
 
 // tourRouter.param('id', tourController.checkID);
 
