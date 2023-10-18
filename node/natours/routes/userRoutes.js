@@ -21,6 +21,12 @@ userRouter.patch(
 userRouter.patch('/updateMe', authController.protect, userController.updateMe);
 userRouter.delete('/deleteMe', authController.protect, userController.deleteMe);
 
+userRouter.get(
+  '/me',
+  authController.protect,
+  userController.getMe, // getMe is a middleware that sets req.params.id = req.user.id
+  userController.getUser
+);
 userRouter.get('/', userController.getAllUsers);
 userRouter.get('/:id', userController.getUser);
 userRouter.post('/', userController.createUser);
