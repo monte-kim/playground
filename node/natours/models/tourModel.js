@@ -1,8 +1,6 @@
 import mongoose from 'mongoose';
 import slugify from 'slugify';
 
-import User from './userModel.js';
-
 const tourSchema = new mongoose.Schema(
   {
     name: {
@@ -118,6 +116,13 @@ tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
 
+// tour and _id are the same
+// they are connected by the virtual populate
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id',
+});
 // DOCUMENT MIDDLEWARE: this = current document
 // runs before '.save()' and '.create()
 // .insertMany()에서는 안 통하고, 방금 저장 및 생성한 데이터와 관련된 함수를 수행
