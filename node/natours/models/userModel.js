@@ -79,10 +79,7 @@ userSchema.methods.correctPassword = async function (
 
 userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   if (this.passwordChangedAt) {
-    const changedTimeStamp = parseInt(
-      this.passwordChangedAt.getTime() / 1000,
-      10
-    );
+    const changedTimeStamp = parseInt(this.passwordChangedAt.getTime() / 1000, 10);
 
     // false === JWTTimestamp이 더 최근이면 비밀번호 안 바뀜
     return JWTTimestamp < changedTimeStamp;
@@ -95,10 +92,7 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
 userSchema.methods.createPasswordResetToken = function () {
   const resetToken = crypto.randomBytes(32).toString('hex');
 
-  this.passwordResetToken = crypto
-    .createHash('sha256')
-    .update(resetToken)
-    .digest('hex');
+  this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
 
   this.passwordResetExpiresIn = Date.now() + 10 * 60 * 1000; // 지금으로부터 10분(10 * 60초 * 1000ms)
   return resetToken;
