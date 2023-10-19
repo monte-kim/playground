@@ -91,6 +91,7 @@ export const factory = {
         .sort()
         .limitFields()
         .paginate();
+      // const doc = await features.query.explain();
       const doc = await features.query; // 이렇게 분리하는 것은 위에서 sorting, limiting 과 같은 다양한 함수를 요구에 따라 추가하기 위함
 
       res.status(200).json({
