@@ -33,6 +33,10 @@ const reviewSchema = new mongoose.Schema(
   }
 );
 
+// Preventing duplicate reviews
+// How? By setting the tour and user fields to be unique together
+reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
+
 reviewSchema.pre(/^find/, function (next) {
   // this.populate({ path: 'tour', select: 'name' }).populate({
   //   path: 'user',
