@@ -167,4 +167,36 @@ export default class TourController {
       data: { plan },
     });
   });
+
+  // '/tours-within/:distance/center/:latlng/unit/:unit'
+  // '/tours-within/233/center/37.58542,126.9969/unit/mi'
+  getToursWithin = catchAsync(async (req, res, next) => {
+    const { distance, latlng, unit } = req.params;
+    const [lat, lng] = latlng.split(',');
+
+    // radius of the earth = 3963.2 mi or 6378.1 km
+    // radian = distance / radius is the angle of the circle
+    const radius = unit === 'mi' ? distance / 3963.2 : distance / 6378.1;
+
+    if (!lat || !lng) {
+      next(
+        new AppError(
+          'Please provide latitude and longitude in the format lat,lng.',
+          400
+        )
+      );
+    }
+
+    const tours = await Tour.find({
+      startLocation: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },
+    });
+
+    res.status(200).json({
+      status: 'success',
+      results: tours.length,
+      data: {
+        data: tours,
+      },
+    });
+  });
 }

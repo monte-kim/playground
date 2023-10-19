@@ -115,6 +115,7 @@ const tourSchema = new mongoose.Schema(
 // tourSchema.index({ price: 1 });
 tourSchema.index({ price: 1, ratingsAverage: -1 });
 tourSchema.index({ slug: 1 });
+tourSchema.index({ startLocation: '2dsphere' });
 
 // 비즈니스 모델과 비즈니스 로직을 최대한 분리하기 위해
 tourSchema.virtual('durationWeeks').get(function () {

@@ -28,6 +28,13 @@ tourRouter.get(
   authController.restrictTo('admin', 'lead-guide', 'guide'),
   tourController.getMonthlyPlan
 );
+
+// this api gets the tours within a certain distance from a certain point
+tourRouter.get(
+  '/tours-within/:distance/center/:latlng/unit/:unit',
+  tourController.getToursWithin
+);
+
 tourRouter.post(
   '/',
   authController.protect,
