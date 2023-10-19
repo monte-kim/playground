@@ -177,10 +177,13 @@ tourSchema.post(/^find/, function (docs, next) {
 });
 
 // AGGREGATION MIDDLEWARE: aggregate가 실행되기 전에 모든 코드를 수정하긴 번거로우니 여기서 한 번에 처리
+// aggregate가 하는 일은 DB에서 데이터를 가져오는 것이 아니라, DB에게 어떤 일을 하라고 지시하는 것
 // this = aggregation object
 tourSchema.pre('aggregate', function (next) {
-  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-  console.log(this.pipeline());
+  const things = this.pipeline()[0];
+  if (Object.keys(things)[0] !== '$geoNear') {
+    this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+  }
   next();
 });
 

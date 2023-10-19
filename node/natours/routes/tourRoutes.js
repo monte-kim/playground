@@ -14,11 +14,7 @@ tourRouter.use('/:tourId/reviews', reviewRouter);
 
 // tourRouter.param('id', tourController.checkID);
 
-tourRouter.get(
-  '/top-5-cheap',
-  tourController.aliasTopTours,
-  tourController.getAllTours
-);
+tourRouter.get('/top-5-cheap', tourController.aliasTopTours, tourController.getAllTours);
 
 tourRouter.get('/', tourController.getAllTours);
 tourRouter.get('/tour-stats', tourController.getTourStats);
@@ -30,10 +26,9 @@ tourRouter.get(
 );
 
 // this api gets the tours within a certain distance from a certain point
-tourRouter.get(
-  '/tours-within/:distance/center/:latlng/unit/:unit',
-  tourController.getToursWithin
-);
+tourRouter.get('/tours-within/:distance/center/:latlng/unit/:unit', tourController.getToursWithin);
+
+tourRouter.get('/distances/:latlng/unit/:unit', tourController.getDistances);
 
 tourRouter.post(
   '/',
