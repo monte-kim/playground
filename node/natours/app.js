@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import mongoSanitize from 'express-mongo-sanitize';
 import xss from 'xss-clean';
 import hpp from 'hpp';
+import dotenv from 'dotenv';
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -15,6 +16,8 @@ import userRouter from './routes/userRoutes.js';
 import reviewRouter from './routes/reviewRoutes.js';
 
 import ErrorController from './controllers/errorController.js';
+
+dotenv.config({ path: './config.env' });
 
 const app = express();
 
@@ -33,6 +36,7 @@ app.use(express.static(`${__dirname}/public`));
 app.use(helmet());
 
 // Development logging
+// ex) GET /api/v1/tours 200 4.096 ms - 8005
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
