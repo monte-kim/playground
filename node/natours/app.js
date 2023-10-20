@@ -14,6 +14,7 @@ import AppError from './utils/appError.js';
 import tourRouter from './routes/tourRoutes.js';
 import userRouter from './routes/userRoutes.js';
 import reviewRouter from './routes/reviewRoutes.js';
+import viewRouter from './routes/viewRoutes.js';
 
 import ErrorController from './controllers/errorController.js';
 
@@ -77,10 +78,7 @@ app.use((req, res, next) => {
 });
 
 // 3. ROUTES
-app.get('/', (req, res) => {
-  res.status(200).render('base');
-});
-
+app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
