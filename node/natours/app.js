@@ -18,7 +18,17 @@ import ErrorController from './controllers/errorController.js';
 
 const app = express();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+app.set('view engine', 'pug');
+app.set('views', `${__dirname}/views`);
+
 // 1. GLOBAL MIDDLEWARES
+// Serving static files(HTML in public folder)
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = dirname(__filename);
+app.use(express.static(`${__dirname}/public`));
 // Security HTTP headers
 app.use(helmet());
 
@@ -51,11 +61,6 @@ app.use(
   })
 ); // removes duplicate query strings(ex: ?sort=duration&sort=price) and only uses the last one
 
-// Serving static files(HTML in public folder)
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-app.use(express.static(`${__dirname}/public`));
-
 // app.use((req, res, next) => {
 //   console.log('Hello from middleware');
 //   next();
@@ -68,6 +73,10 @@ app.use((req, res, next) => {
 });
 
 // 3. ROUTES
+app.get('/', (req, res) => {
+  res.status(200).render('base');
+});
+
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);

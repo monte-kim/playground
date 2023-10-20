@@ -25,7 +25,7 @@ console.log(`Server runs as "${process.env.NODE_ENV}" mode`);
 // START SERVER
 const port = process.env.PORT || 8080;
 const server = app.listen(port, () => {
-  console.log(`App running on port ${port}.`);
+  console.log(`App running on port ${port}.\nhttp://localhost:${port}`);
 });
 
 process.on('unhandledRejection', (err) => {
