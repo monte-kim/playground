@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import UserController from '../controllers/userController.js';
 import AuthController from '../controllers/authController.js';
-import ReviewController from '../controllers/reviewController.js';
 
 const userController = new UserController();
 const authController = new AuthController();
@@ -16,7 +15,7 @@ userRouter.patch('/resetPassword/:token', authController.resetPassword);
 
 userRouter.use(authController.protect);
 userRouter.patch('/updatePassword', authController.updatePassword);
-userRouter.patch('/updateMe', userController.updateMe);
+userRouter.patch('/updateMe', userController.uploadUserPhoto, userController.resizeUserPhoto, userController.updateMe);
 userRouter.delete('/deleteMe', userController.deleteMe);
 
 // getMe is a middleware that sets req.params.id = req.user.id
