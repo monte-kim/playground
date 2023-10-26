@@ -3,32 +3,16 @@ import { useEffect, useState } from 'react';
 
 const KakaoLoginCallback = () => {
   const [accessToken, setAccessToken] = useState('');
-
   useEffect(() => {
-    const params = new URL(window.location.href).searchParams;
-    const code = params.get('code');
-    const grand_type = 'authorization_code';
-    const client_id = '';
-    const redirect_uri = '';
+    async function getAccessToken() {
+      const params = new URL(window.location.href).searchParams;
+      const code = params.get('code');
 
-    axios.post('http://localhost:8080/auth/kakao', { code });
-    // axios
-    //   .post(
-    //     `https://kauth.kakao.com/oauth/token?grant_type=${grand_type}&client_id=${client_id}&redirect_uri=${redirect_uri}&code=${code}`,
-    //     {},
-    //     {
-    //       headers: {
-    //         'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-    //       },
-    //     },
-    //   )
-    //   .then((res) => {
-    //     setAccessToken(res.data.access_token);
-    //     console.log(res);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+      const response = await axios.post('http://localhost:8080/auth/kakao', { code });
+
+      setAccessToken(response.data.accessToken);
+    }
+    getAccessToken();
   }, []);
 
   const handleLogout = () => {

@@ -1,8 +1,6 @@
 const KakaoLogin = () => {
-  const Rest_api_key = ''; //REST API KEY
-  const redirect_uri = ''; //Redirect URI
   // oauth 요청 URL
-  const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${Rest_api_key}&redirect_uri=${redirect_uri}&response_type=code`;
+  const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_KAKAO_REDIRECT_URI}&response_type=code`;
   const handleLogin = () => {
     window.location.href = kakaoURL;
   };

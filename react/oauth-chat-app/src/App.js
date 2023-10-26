@@ -17,7 +17,7 @@ function App() {
             </div>
           }
         />
-        <Route path='/authauth' element={<KakaoLoginCallback />} />
+        <Route path='/auth/kakao' element={<KakaoLoginCallback />} />
       </Routes>
     </BrowserRouter>
   );
