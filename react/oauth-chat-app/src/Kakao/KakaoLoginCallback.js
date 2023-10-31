@@ -8,7 +8,7 @@ const KakaoLoginCallback = () => {
       const params = new URL(window.location.href).searchParams;
       const code = params.get('code');
 
-      const response = await axios.post('http://localhost:8080/users/kakao', { code });
+      const response = await axios.post('http://localhost:8080/users/kakao/login', { code });
 
       console.log(response.data);
       setAccessToken(response.data.accessToken);
@@ -16,29 +16,15 @@ const KakaoLoginCallback = () => {
     getAccessToken();
   }, []);
 
-  const handleLogout = () => {
-    // 카카오 로그아웃 엔드포인트
-    const logoutURL = 'https://kapi.kakao.com/v1/user/logout';
+  const handleLogout = async () => {
+    console.log(accessToken);
+    const response = await axios.get('http://localhost:8080/users/kakao/logout', {
+      headers: {
+        Authorization: accessToken, // 카카오 로그인 후 받은 액세스 토큰을 사용해야 합니다
+      },
+    });
 
-    // 로그아웃 요청 보내기
-    axios
-      .post(logoutURL, null, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`, // 카카오 로그인 후 받은 액세스 토큰을 사용해야 합니다
-        },
-      })
-      .then((res) => {
-        // 로그아웃 성공
-        console.log('로그아웃 되었습니다.');
-
-        // 로그아웃 후 리다이렉트할 페이지
-        const homeURL = 'http://localhost:3000/';
-        window.location.href = homeURL; // 리다이렉트
-      })
-      .catch((err) => {
-        // 로그아웃 오류
-        console.error('로그아웃 중 오류가 발생했습니다.');
-      });
+    console.log(response.data);
   };
 
   return (
