@@ -32,20 +32,6 @@ const KakaoLoginCallback = () => {
       <h1>카카오 로그인 콜백</h1>
       <button onClick={handleLogout}>LOGOUT</button>
       <br />
-      <button
-        onClick={async () => {
-          console.log(accessToken);
-
-          await axios.get('http://localhost:8080/users/verify', {
-            headers: {
-              Authorization: accessToken,
-            },
-          });
-        }}
-      >
-        PROTECTED?
-      </button>
-      <br />
       <a href='/'>홈으로</a>
     </>
   );
