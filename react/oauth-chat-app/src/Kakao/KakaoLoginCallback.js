@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const KakaoLoginCallback = () => {
+  const navigate = useNavigate();
   const [accessToken, setAccessToken] = useState('');
   useEffect(() => {
     async function getAccessToken() {
@@ -25,6 +27,7 @@ const KakaoLoginCallback = () => {
     });
 
     console.log(response.data);
+    navigate('/');
   };
 
   return (
