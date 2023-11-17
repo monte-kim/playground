@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const KakaoLoginCallback = () => {
+  const navigate = useNavigate();
   const [accessToken, setAccessToken] = useState('');
   useEffect(() => {
     async function getAccessToken() {
@@ -25,26 +27,13 @@ const KakaoLoginCallback = () => {
     });
 
     console.log(response.data);
+    navigate('/');
   };
 
   return (
     <>
       <h1>카카오 로그인 콜백</h1>
       <button onClick={handleLogout}>LOGOUT</button>
-      <br />
-      <button
-        onClick={async () => {
-          console.log(accessToken);
-
-          await axios.get('http://localhost:8080/users/verify', {
-            headers: {
-              Authorization: accessToken,
-            },
-          });
-        }}
-      >
-        PROTECTED?
-      </button>
       <br />
       <a href='/'>홈으로</a>
     </>
