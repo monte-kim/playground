@@ -5,10 +5,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, '이름을 입력해주세요.'],
   },
-  loginType: {
-    type: String,
-    required: [true, '로그인 타입이 필요합니다.'],
-  },
   profileImage: {
     type: String,
     default: 'default.jpg',
@@ -22,6 +18,11 @@ const userSchema = new mongoose.Schema({
     default: true,
     select: false,
   },
+});
+
+userSchema.pre(/^find/, function (next) {
+  this.find({ active: { $ne: false } });
+  next();
 });
 
 const User = mongoose.model('User', userSchema);

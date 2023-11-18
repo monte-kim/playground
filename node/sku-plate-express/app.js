@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 
 import userRouter from './routes/userRouter.js';
+import restaurantRouter from './routes/restaurantRouter.js';
 
 dotenv.config({ path: './config.env' });
 
@@ -20,5 +21,6 @@ app.get('/', (req, res) => {
 });
 
 app.use('/users', userRouter);
+app.use('/restaurants', restaurantRouter);
 
 export default app;

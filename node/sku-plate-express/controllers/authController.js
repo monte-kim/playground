@@ -25,10 +25,12 @@ class AuthController {
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
+      console.log('Access Token: ', kakaoUserAccessToken);
+
       return res.status(200).json({
         status: 'success',
         message: '카카오 로그인 성공',
-        accessToken: kakaoResponse.data.access_token,
+        accessToken: kakaoUserAccessToken,
         user: existingUser,
       });
     } else {
@@ -38,10 +40,12 @@ class AuthController {
         email,
       });
 
+      console.log('Access Token: ', kakaoUserAccessToken);
+
       res.status(201).json({
         status: 'success',
         message: '카카오 로그인 성공',
-        accessToken: kakaoResponse.data.access_token,
+        accessToken: kakaoUserAccessToken,
         user: newUser,
       });
     }
@@ -102,6 +106,7 @@ class AuthController {
         },
       });
 
+      console.log('Logout Success');
       return res.status(200).json({ message: '카카오 로그아웃 성공' });
     } catch (error) {
       console.error(error);
