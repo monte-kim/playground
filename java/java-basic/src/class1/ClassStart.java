@@ -2,16 +2,14 @@ package class1;
 
 public class ClassStart {
     public static void main(String[] args) {
-        Student student1 = new Student();
-        student1.name = "John";
-        student1.age = 26;
-        student1.grade = 90;
-
-        Student student2 = new Student();
-        student2.name = "Sam";
-        student2.age = 25;
-        student2.grade = 80;
-        System.out.println("NAME: " + student1.name + ", AGE: " + student1.age + ", GRADE: " + student1.grade);
-        System.out.println("NAME: " + student2.name + ", AGE: " + student2.age + ", GRADE: " + student2.grade);
+//        int[] numbers = new int[10];
+        Student[] students = new Student[10];
+        for(int i = 0; i < 10; i++){
+            students[i] = new Student();
+            students[i].name = "Student" + i;
+            students[i].age = 20 + i;
+            students[i].grade = 70 + i;
+            System.out.println("NAME: " + students[i].name + ", AGE: " + students[i].age + ", GRADE: " + students[i].grade);
+        }
     }
 }
