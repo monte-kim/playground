@@ -1,5 +1,6 @@
 //package hello.hellospring;
 //
+//import hello.hellospring.aop.TimeTraceAop;
 //import hello.hellospring.repository.MemberRepository;
 //import hello.hellospring.repository.MemoryMemberRepository;
 //import hello.hellospring.service.MemberService;
@@ -16,5 +17,10 @@
 //    @Bean
 //    public MemberRepository memberRepository(){
 //        return new MemoryMemberRepository();
+//    }
+//
+//    @Bean
+//    public TimeTraceAop timeTraceAop(){
+//        return new TimeTraceAop();
 //    }
 //}
