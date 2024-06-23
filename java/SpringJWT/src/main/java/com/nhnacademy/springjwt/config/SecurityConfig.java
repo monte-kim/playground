@@ -10,10 +10,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
+import com.nhnacademy.springjwt.jwt.CustomLogoutFilter;
 import com.nhnacademy.springjwt.jwt.JWTFilter;
 import com.nhnacademy.springjwt.jwt.JWTUtils;
 import com.nhnacademy.springjwt.jwt.LoginFilter;
+import com.nhnacademy.springjwt.repository.RefreshTokenRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 	private final AuthenticationConfiguration authenticationConfiguration;
 	private final JWTUtils jwtUtils;
+	private final RefreshTokenRepository refreshTokenRepository;
 
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
@@ -54,10 +58,12 @@ public class SecurityConfig {
 			.authorizeHttpRequests((auth) -> auth
 				.requestMatchers("/login", "/", "/sign-up").permitAll()
 				.requestMatchers("/admin").hasRole("ADMIN")
+				.requestMatchers("/reissue").permitAll()
 				.anyRequest().authenticated());
 
 		http.addFilterBefore(new JWTFilter(jwtUtils), LoginFilter.class);
-		http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtils), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtils, refreshTokenRepository), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(new CustomLogoutFilter(refreshTokenRepository, jwtUtils), LogoutFilter.class);
 
 		//세션 설정
 		http
