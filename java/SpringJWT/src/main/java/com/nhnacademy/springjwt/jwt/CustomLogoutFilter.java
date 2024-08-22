@@ -2,6 +2,7 @@ package com.nhnacademy.springjwt.jwt;
 
 import java.io.IOException;
 
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.filter.GenericFilterBean;
 
 import com.nhnacademy.springjwt.repository.RefreshTokenRepository;
@@ -18,7 +19,8 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class CustomLogoutFilter extends GenericFilterBean {
-	private final RefreshTokenRepository refreshTokenRepository;
+	// private final RefreshTokenRepository refreshTokenRepository;
+	private final RedisTemplate<String, Object> redisTemplate;
 	private final JWTUtils jwtUtils;
 
 	@Override
@@ -81,7 +83,8 @@ public class CustomLogoutFilter extends GenericFilterBean {
 		}
 
 		//DB에 저장되어 있는지 확인
-		Boolean isExist = refreshTokenRepository.existsByRefreshToken(refresh);
+		// Boolean isExist = refreshTokenRepository.existsByRefreshToken(refresh);
+		Boolean isExist = redisTemplate.opsForHash().hasKey("refreshToken", jwtUtils.getUsername(refresh));
 		if (!isExist) {
 
 			//response status code
@@ -91,7 +94,8 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
 		//로그아웃 진행
 		//Refresh 토큰 DB에서 제거
-		refreshTokenRepository.deleteByRefreshToken(refresh);
+		// refreshTokenRepository.deleteByRefreshToken(refresh);
+		redisTemplate.opsForHash().delete("refreshToken", jwtUtils.getUsername(refresh));
 
 		//Refresh 토큰 Cookie 값 0
 		Cookie cookie = new Cookie("refresh", null);

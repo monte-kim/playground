@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	private final AuthenticationManager authenticationManager;
 	private final JWTUtils jwtUtils;
-	private final RefreshTokenRepository refreshTokenRepository;
+	private final RedisTemplate<String, Object> redisTemplate;
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws
@@ -75,7 +76,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 		refreshTokenEntity.setRefreshToken(refresh);
 		refreshTokenEntity.setExpiresIn(date.toString());
 
-		refreshTokenRepository.save(refreshTokenEntity);
+		redisTemplate.opsForHash().put("refreshToken", username, refreshTokenEntity);
+		// refreshTokenRepository.save(refreshTokenEntity);
 	}
 
 	@Override

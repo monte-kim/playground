@@ -2,6 +2,7 @@ package com.nhnacademy.springjwt.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,7 +27,8 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 	private final AuthenticationConfiguration authenticationConfiguration;
 	private final JWTUtils jwtUtils;
-	private final RefreshTokenRepository refreshTokenRepository;
+	// private final RefreshTokenRepository refreshTokenRepository;
+	private final RedisTemplate<String, Object> redisTemplate;
 
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
@@ -62,8 +64,10 @@ public class SecurityConfig {
 				.anyRequest().authenticated());
 
 		http.addFilterBefore(new JWTFilter(jwtUtils), LoginFilter.class);
-		http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtils, refreshTokenRepository), UsernamePasswordAuthenticationFilter.class);
-		http.addFilterBefore(new CustomLogoutFilter(refreshTokenRepository, jwtUtils), LogoutFilter.class);
+		http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtils, redisTemplate), UsernamePasswordAuthenticationFilter.class);
+		// http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtils, refreshTokenRepository), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(new CustomLogoutFilter(redisTemplate, jwtUtils), LogoutFilter.class);
+		// http.addFilterBefore(new CustomLogoutFilter(refreshTokenRepository, jwtUtils), LogoutFilter.class);
 
 		//세션 설정
 		http
