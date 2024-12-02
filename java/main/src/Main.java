@@ -1,50 +1,27 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.Stack;
-import java.util.StringTokenizer;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-		StringBuilder sb = new StringBuilder();
 
-		int K = Integer.parseInt(st.nextToken());
-		int N = Integer.parseInt(st.nextToken());
-		int[] cables = new int[K];
+		int steps = Integer.parseInt(br.readLine());
 
-		long max = 0;
-		for (int i = 0; i < K; i++) {
-			cables[i] = Integer.parseInt(br.readLine());
-			max = Math.max(max, cables[i]);
+		int[] scores = new int[steps + 1];
+		for (int i = 1; i <= steps; i++) {
+			scores[i] = Integer.parseInt(br.readLine());
 		}
 
-		long left = 1;
-		long right = max;
-		long result = 0;
-		while(left <= right){
-			long mid = (left + right)/2;
-			long count = 0;
-
-			for(int i = 0; i < K; i++){
-				count += cables[i] / mid;
-			}
-
-			if(count >= N){
-				result = mid;
-				left = mid + 1;
-			} else {
-				right = mid - 1;
-			}
+		int[] maxScores = new int[steps + 1];
+		maxScores[1] = scores[1];
+		if (steps >= 2) {
+			maxScores[2] = maxScores[1] + scores[2];
+		}
+		for (int i = 3; i <= steps; i++) {
+			maxScores[i] = Math.max(scores[i - 1] + maxScores[i - 3], maxScores[i - 2]) + scores[i];
 		}
 
-		bw.write(String.valueOf(result));
-		bw.flush();
-		bw.close();
-		br.close();
+		System.out.println(maxScores[steps]);
 	}
 }
