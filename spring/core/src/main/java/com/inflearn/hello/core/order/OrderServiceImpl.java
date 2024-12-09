@@ -3,13 +3,16 @@ package com.inflearn.hello.core.order;
 import com.inflearn.hello.core.discount.DiscountPolicy;
 import com.inflearn.hello.core.member.Member;
 import com.inflearn.hello.core.member.MemberRepository;
-import com.inflearn.hello.core.member.MemoryMemberRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class OrderServiceImpl implements OrderService {
 
   private final MemberRepository memberRepository;
   private final DiscountPolicy discountPolicy;
 
+  @Autowired
   public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
     this.memberRepository = memberRepository;
     this.discountPolicy = discountPolicy;
