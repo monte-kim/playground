@@ -15,20 +15,16 @@ import org.springframework.context.annotation.Configuration;
 public class HandlerMappingConfig {
 
   @Bean
-  public HandlerMappingMap handlerMappingMap() {
-    return new HandlerMappingMap(registerHandlers());
-  }
+  public Map<String, Object> handlerMappingMap() {
+    Map<String, Object> handlerMappingMap = new HashMap<>();
+    handlerMappingMap.put("/front-controller/v5/v3/members/new-form", new MemberFormControllerV3());
+    handlerMappingMap.put("/front-controller/v5/v3/members/save", new MemberSaveControllerV3());
+    handlerMappingMap.put("/front-controller/v5/v3/members", new MemberListControllerV3());
 
-  private Map<String, Object> registerHandlers() {
-    HashMap<String, Object> urlMap = new HashMap<>();
-    
-    urlMap.put("/front-controller/v5/v3/members/new-form", new MemberFormControllerV3());
-    urlMap.put("/front-controller/v5/v3/members/save", new MemberSaveControllerV3());
-    urlMap.put("/front-controller/v5/v3/members", new MemberListControllerV3());
+    handlerMappingMap.put("/front-controller/v5/v4/members/new-form", new MemberFormControllerV4());
+    handlerMappingMap.put("/front-controller/v5/v4/members/save", new MemberSaveControllerV4());
+    handlerMappingMap.put("/front-controller/v5/v4/members", new MemberListControllerV4());
 
-    urlMap.put("/front-controller/v5/v4/members/new-form", new MemberFormControllerV4());
-    urlMap.put("/front-controller/v5/v4/members/save", new MemberSaveControllerV4());
-    urlMap.put("/front-controller/v5/v4/members", new MemberListControllerV4());
-    return urlMap;
+    return handlerMappingMap;
   }
 }

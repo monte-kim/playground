@@ -8,14 +8,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @WebServlet(name = "frontControllerServletV5", urlPatterns = "/front-controller/v5/*")
 public class FrontControllerServletV5 extends HttpServlet {
 
-  private final HandlerMappingMap handlerMappingMap;
-  private final HandlerAdapterList handlerAdapters;
+  private final Map<String, Object> handlerMappingMap;
+  private final List<MyHandlerAdapter> handlerAdapters;
 
   @Override
   protected void service(HttpServletRequest request, HttpServletResponse response)
@@ -41,11 +43,17 @@ public class FrontControllerServletV5 extends HttpServlet {
     return new MyView("/WEB-INF/views/" + viewName + ".jsp");
   }
 
-  private Object getHandler(HttpServletRequest request) {
-    return handlerMappingMap.getHandler(request);
+  private MyHandlerAdapter getHandlerAdapter(Object handler) {
+    for (MyHandlerAdapter handlerAdapter : handlerAdapters) {
+      if (handlerAdapter.supports(handler)) {
+        return handlerAdapter;
+      }
+    }
+    throw new IllegalArgumentException("handler adapter 찾을 수 없음 : " + handler);
   }
 
-  private MyHandlerAdapter getHandlerAdapter(Object handler) {
-    return handlerAdapters.getHandlerAdapter(handler);
+  private Object getHandler(HttpServletRequest request) {
+    String requestURI = request.getRequestURI();
+    return handlerMappingMap.get(requestURI);
   }
 }
