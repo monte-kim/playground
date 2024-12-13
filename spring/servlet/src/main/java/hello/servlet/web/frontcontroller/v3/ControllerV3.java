@@ -1,15 +1,10 @@
 package hello.servlet.web.frontcontroller.v3;
 
 import hello.servlet.web.frontcontroller.ModelView;
-import hello.servlet.web.frontcontroller.MyView;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
+import hello.servlet.web.frontcontroller.MyController;
 import java.util.Map;
 
-public interface ControllerV3 {
+public interface ControllerV3 extends MyController {
 
-    ModelView process(Map<String, String> paramMap);
+  ModelView process(Map<String, String> paramMap);
 }

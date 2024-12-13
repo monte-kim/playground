@@ -1,8 +1,9 @@
 package hello.servlet.web.frontcontroller.v4;
 
+import hello.servlet.web.frontcontroller.MyController;
 import java.util.Map;
 
-public interface ControllerV4 {
+public interface ControllerV4 extends MyController {
 
   /**
    * @param paramMap

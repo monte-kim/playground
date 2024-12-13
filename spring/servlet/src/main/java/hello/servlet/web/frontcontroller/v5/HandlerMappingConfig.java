@@ -1,5 +1,6 @@
 package hello.servlet.web.frontcontroller.v5;
 
+import hello.servlet.web.frontcontroller.MyController;
 import hello.servlet.web.frontcontroller.v3.controller.MemberFormControllerV3;
 import hello.servlet.web.frontcontroller.v3.controller.MemberListControllerV3;
 import hello.servlet.web.frontcontroller.v3.controller.MemberSaveControllerV3;
@@ -15,13 +16,13 @@ import org.springframework.context.annotation.Configuration;
 public class HandlerMappingConfig {
 
   @Bean
-  public HandlerMappingMap handlerMappingMap() {
-    return new HandlerMappingMap(registerHandlers());
+  public Map<String, MyController> handlerMappingMap() {
+    return registerHandlers();
   }
 
-  private Map<String, Object> registerHandlers() {
-    HashMap<String, Object> urlMap = new HashMap<>();
-    
+  private Map<String, MyController> registerHandlers() {
+    HashMap<String, MyController> urlMap = new HashMap<>();
+
     urlMap.put("/front-controller/v5/v3/members/new-form", new MemberFormControllerV3());
     urlMap.put("/front-controller/v5/v3/members/save", new MemberSaveControllerV3());
     urlMap.put("/front-controller/v5/v3/members", new MemberListControllerV3());

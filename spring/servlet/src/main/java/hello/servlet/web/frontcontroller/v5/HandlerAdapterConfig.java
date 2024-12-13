@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Configuration;
 public class HandlerAdapterConfig {
 
   @Bean
-  public HandlerAdapterList handlerAdapterList() {
-    return new HandlerAdapterList(registerHandlerAdapters());
+  public List<MyHandlerAdapter> handlerAdapterList() {
+    return registerHandlerAdapters();
   }
 
   private List<MyHandlerAdapter> registerHandlerAdapters() {
