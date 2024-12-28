@@ -1,7 +1,7 @@
-package hello.jdbc.connection.repository;
+package hello.jdbc.repository;
 
 import hello.jdbc.connection.DBConnectionUtil;
-import hello.jdbc.connection.domain.Member;
+import hello.jdbc.domain.Member;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.util.NoSuchElementException;
 import lombok.extern.slf4j.Slf4j;
 
+/** JDBC - DriverManager 사용 */
 @Slf4j
 public class MemberRepositoryV0 {
 
