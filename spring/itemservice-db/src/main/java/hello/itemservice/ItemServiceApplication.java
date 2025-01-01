@@ -18,7 +18,9 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 //@Import(JdbcTemplateV3Config.class)
 //@Import(MyBatisConfig.class)
 //@Import(JpaConfig.class)
-@Import(SpringDataJpaConfig.class)
+//@Import(SpringDataJpaConfig.class)
+//@Import(QueryDSLConfig.class)
+@Import(V2Config.class)
 @Slf4j
 @SpringBootApplication(scanBasePackages = "hello.itemservice.web")
 public class ItemServiceApplication {
@@ -27,11 +29,11 @@ public class ItemServiceApplication {
 		SpringApplication.run(ItemServiceApplication.class, args);
 	}
 
-	@Bean
-	@Profile("local")
-	public TestDataInit testDataInit(ItemRepository itemRepository) {
-		return new TestDataInit(itemRepository);
-	}
+//	@Bean
+//	@Profile("local")
+//	public TestDataInit testDataInit(ItemRepository itemRepository) {
+//		return new TestDataInit(itemRepository);
+//	}
 
 
 //	@Bean
