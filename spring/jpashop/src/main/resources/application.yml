@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: jpashop
+
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/Monte/environment/jpashop
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+    open-in-view: false
+
+logging:
+  level:
+    org.hibernate.sql: debug
+    org.hibernate.orm.jdbc.bind: trace
