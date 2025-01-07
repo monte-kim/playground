@@ -1,0 +1,36 @@
+package jpabook.jpashop2;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
+import jpabook.jpashop2.domain.Order;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class Jpashop2Application {
+
+  public static void main(String[] args) {
+
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
+    EntityManager em = emf.createEntityManager();
+
+    EntityTransaction tx = em.getTransaction();
+    tx.begin();
+
+    try {
+
+      Order order = em.find(Order.class, 1L);
+      order.getMemberId();
+
+      tx.commit();
+    } catch (Exception e) {
+      tx.rollback();
+    } finally {
+      em.close();
+    }
+    emf.close();
+  }
+
+}
