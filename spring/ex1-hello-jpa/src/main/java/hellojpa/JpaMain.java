@@ -20,7 +20,8 @@ public class JpaMain {
       em.persist(member);
       System.out.println("==============");
 //        em.flush();
-//      member.setName("Test");
+      member.setName("Test");
+      member.setName("Member");
 
       tx.commit();
     } catch (Exception e) {
