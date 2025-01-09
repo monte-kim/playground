@@ -1,4 +1,4 @@
-package jpabook.jpashop2.domain;
+package hellojpa;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,24 +14,24 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Member {
-
-  public Member() {
-  }
+public class Team {
 
   @Id
   @GeneratedValue
-  @Column(name = "MEMBER_ID")
+  @Column(name = "TEAM_ID")
   private Long id;
 
   private String name;
 
-  private String city;
+  @OneToMany(mappedBy = "team")
+  private List<Member> members = new ArrayList<>();
 
-  private String street;
-
-  private String zipcode;
-
-  @OneToMany(mappedBy = "member")
-  private List<Order> orders = new ArrayList<>();
+  @Override
+  public String toString() {
+    return "Team{" +
+        "id=" + id +
+        ", name='" + name + '\'' +
+        ", members=" + members +
+        '}';
+  }
 }

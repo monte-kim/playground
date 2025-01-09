@@ -1,6 +1,10 @@
 package hellojpa;
 
-import jakarta.persistence.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
+import java.util.List;
 
 public class JpaMain {
 
@@ -13,15 +17,22 @@ public class JpaMain {
     tx.begin();
 
     try {
-//      Member member = new Member(1L, "member");
+
+      Team team = new Team();
+      team.setName("TeamA");
+      em.persist(team);
+
       Member member = new Member();
-      member.setName("Member");
-      System.out.println("==============");
+      member.setUsername("member1");
+      member.changeTeam(team);
       em.persist(member);
-      System.out.println("==============");
-//        em.flush();
-      member.setName("Test");
-      member.setName("Member");
+
+//      team.getMembers().add(member); // Member.class에 setTeam() 안에 넣어줘
+
+      Team findTeam = em.find(Team.class, team.getId());
+      List<Member> members = findTeam.getMembers();
+
+      System.out.println(findTeam);
 
       tx.commit();
     } catch (Exception e) {
