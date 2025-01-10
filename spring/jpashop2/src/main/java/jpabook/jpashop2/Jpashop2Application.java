@@ -20,10 +20,6 @@ public class Jpashop2Application {
     tx.begin();
 
     try {
-
-      Order order = em.find(Order.class, 1L);
-      order.getMemberId();
-
       tx.commit();
     } catch (Exception e) {
       tx.rollback();
