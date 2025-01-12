@@ -1,6 +1,9 @@
 package jpabook.jpashop2.domain;
 
+import static jakarta.persistence.FetchType.*;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -20,7 +23,7 @@ public class Category {
 
   private String name;
 
-  @ManyToOne
+  @ManyToOne(fetch = LAZY)
   @JoinColumn(name = "PARENT_ID")
   private Category parent;
 

@@ -18,14 +18,14 @@ public class JpaMain {
 
     try {
 
-//      Team team = new Team();
-//      team.setName("TeamA");
-//      em.persist(team);
+      Team team = new Team();
+      team.setName("TeamA");
+      em.persist(team);
 //
       Member member = new Member();
       member.setUsername("member1");
-      member.setTestField("WOOOOOW");
 //      member.changeTeam(team);
+      member.setTeam(team);
       em.persist(member);
 //
 ////      team.getMembers().add(member); // Member.class에 setTeam() 안에 넣어줘
@@ -42,14 +42,24 @@ public class JpaMain {
 //      movie.setPrice(10000);
 //      em.persist(movie);
 //
-//      em.flush();
-//      em.clear();
+      em.flush();
+      em.clear();
 //
 //      Movie findMovie = em.find(Movie.class, movie.getId());
+
+//      Member findMember = em.find(Member.class, member.getId());
+      Member findMember = em.find(Member.class, member.getId());
+      System.out.println("findMember = " + findMember.getTeam().getClass());
+//      em.detach(findMember);
+//      System.out.println("findMember.getId() = " + findMember.getId());
+//      System.out.println("findMember.getUsername() = " + findMember.getUsername());
+
+      System.out.println("findMember.getTeam().getName() = " + findMember.getTeam().getName());
 
       tx.commit();
     } catch (Exception e) {
       tx.rollback();
+      e.printStackTrace();
     } finally {
       em.close();
     }
