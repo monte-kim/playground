@@ -23,9 +23,9 @@ public class JpaMain {
       em.persist(team);
 //
       Member member = new Member();
-      member.setUsername("member1");
+      member.setName("member1");
 //      member.changeTeam(team);
-      member.setTeam(team);
+//      member.setTeam(team);
       em.persist(member);
 //
 ////      team.getMembers().add(member); // Member.class에 setTeam() 안에 넣어줘
@@ -48,13 +48,13 @@ public class JpaMain {
 //      Movie findMovie = em.find(Movie.class, movie.getId());
 
 //      Member findMember = em.find(Member.class, member.getId());
-      Member findMember = em.find(Member.class, member.getId());
-      System.out.println("findMember = " + findMember.getTeam().getClass());
+//      Member findMember = em.find(Member.class, member.getId());
+//      System.out.println("findMember = " + findMember.getTeam().getClass());
 //      em.detach(findMember);
 //      System.out.println("findMember.getId() = " + findMember.getId());
 //      System.out.println("findMember.getUsername() = " + findMember.getUsername());
 
-      System.out.println("findMember.getTeam().getName() = " + findMember.getTeam().getName());
+//      System.out.println("findMember.getTeam().getName() = " + findMember.getTeam().getName());
 
       tx.commit();
     } catch (Exception e) {
