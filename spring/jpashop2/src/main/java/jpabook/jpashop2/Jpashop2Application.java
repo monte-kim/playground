@@ -4,9 +4,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
-import jpabook.jpashop2.domain.Book;
-import jpabook.jpashop2.domain.Order;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
@@ -21,10 +18,6 @@ public class Jpashop2Application {
     tx.begin();
 
     try {
-      Book book = new Book();
-      book.setName("JPA");
-      book.setAuthor("김영한");
-      em.persist(book);
       tx.commit();
     } catch (Exception e) {
       tx.rollback();

@@ -1,46 +1,48 @@
 package hellojpa;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
-public class Member extends BaseEntity{
+public class Member {
 
   @Id
   @GeneratedValue
   @Column(name = "MEMBER_ID")
   private Long id;
 
-  @Column(name = "USERNAME")
-  private String username;
+  private String name;
 
-//  @Column(name = "TEAM_ID")
-//  private Long teamId;
+  @Embedded
+  private Address homeAddress;
 
-  @ManyToOne()
-  @JoinColumn(name = "TEAM_ID")
-  private Team team;
+  @ElementCollection
+  @CollectionTable(
+      name = "FAVORITE_FOOD",
+      joinColumns = @JoinColumn(name = "MEMBER_ID")
+  )
+  @Column(name = "FOOD_NAME")
+  private Set<String> favoriteFoods = new HashSet<>();
 
-  public void changeTeam(Team team){
-    this.team = team;
-    team.getMembers().add(this);
-  }
+  @ElementCollection
+  @CollectionTable(name = "ADDRESS", joinColumns = @JoinColumn(name = "MEMBER_ID"))
+  private List<Address> addressHistory = new ArrayList<>();
 
-  @Override
-  public String toString() {
-    return "Member{" +
-        "id=" + id +
-        ", username='" + username + '\'' +
-        ", team=" + team +
-        '}';
-  }
+//  @Embedded
+//  private Period workPeriod;
+//
 }
