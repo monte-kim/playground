@@ -24,38 +24,52 @@ public class JpqlApplication {
     tx.begin();
 
     try {
-      Team team = new Team();
-      team.setName("teamA");
-      em.persist(team);
+      Team teamA = new Team();
+      teamA.setName("teamA");
+      em.persist(teamA);
+
+      Team teamB = new Team();
+      teamB.setName("teamB");
+      em.persist(teamB);
 
       Member member = new Member();
       member.setUsername("memberA");
       member.setAge(10);
-      member.changeTeam(team);
+      member.changeTeam(teamA);
       em.persist(member);
 
       Member member2 = new Member();
       member2.setUsername("memberB");
       member2.setAge(10);
-      member2.changeTeam(team);
+      member2.changeTeam(teamA);
       em.persist(member2);
+
+      Member member3 = new Member();
+      member3.setUsername("memberC");
+      member3.setAge(10);
+      member3.changeTeam(teamB);
+      em.persist(member3);
 
       em.flush();
       em.clear();
 
-//      String query =
-//          "select "
-//              + "case when m.age <= 10 then '학생요금'"
-//              + " when m.age >= 60 then '경로요금'"
-//              + " else '일반요금'"
-//              + " end"
-//              + " from Member m";
-      String query = "select function('group_concat', m.username) from Member m";
-      List<String> result = em.createQuery(query, String.class)
-          .getResultList();
-      for (String m : result) {
-        System.out.println("m = " + m);
-      }
+//      String query = "select m from Member m join fetch m.team";
+//      String query = "select t from Team t join fetch t.members";
+//      List<Team> result = em.createQuery(query, Team.class).getResultList();
+//
+//      for (Team team : result) {
+//        System.out.println("team: " + team.getName() + ", members: " + team.getMembers());
+//      }
+
+      em.createQuery("update Member m set m.age = 20 where m.username = 'memberA'");
+
+      Member m = em.find(Member.class, member.getId());
+      System.out.println("m = " + m);
+
+//      Member result = em.createQuery("select m from Member m where m.id = :id", Member.class)
+//          .setParameter("id", member.getId())
+//          .getSingleResult();
+//      System.out.println("member.getAge() = " + result.getAge());
 
       tx.commit();
     } catch (Exception e) {
