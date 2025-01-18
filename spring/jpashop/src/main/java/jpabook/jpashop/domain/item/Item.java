@@ -10,14 +10,20 @@ import jakarta.persistence.ManyToMany;
 import java.util.ArrayList;
 import java.util.List;
 import jpabook.jpashop.domain.Category;
+import jpabook.jpashop.exception.NotEnoughStockException;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 //@DiscriminatorColumn(name = "dtype")
 @Getter
 @Setter
+@SuperBuilder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Item {
 
   @Id
@@ -33,4 +39,21 @@ public abstract class Item {
 
   @ManyToMany(mappedBy = "items")
   private List<Category> categories = new ArrayList<>();
+
+  /**
+   * stock 증가
+   *
+   * @param quantity
+   */
+  public void addStock(int quantity) {
+    this.stockQuantity += quantity;
+  }
+
+  public void removeStock(int quantity) {
+    int stock = this.stockQuantity - quantity;
+    if (stock < 0) {
+      throw new NotEnoughStockException("need more stock");
+    }
+    this.stockQuantity = stock;
+  }
 }
