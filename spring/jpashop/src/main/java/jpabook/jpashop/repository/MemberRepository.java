@@ -20,7 +20,7 @@ public class MemberRepository {
     return em.find(Member.class, id);
   }
 
-  public List<Member> findAll() {
+  public List<Member> findMembers() {
     return em.createQuery("select m from Member m", Member.class)
         .getResultList();
   }
