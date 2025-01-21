@@ -27,14 +27,9 @@ public class Book extends Item {
         .build();
   }
 
-  public static Book updateBook(Long id, String name, int price, int stockQuantity, String author, String isbn) {
-    return Book.builder()
-        .id(id)
-        .name(name)
-        .price(price)
-        .stockQuantity(stockQuantity)
-        .author(author)
-        .isbn(isbn)
-        .build();
+  public void updateBook(String name, int price, int stockQuantity, String author, String isbn) {
+    updateItem(name, price, stockQuantity);
+    this.author = author;
+    this.isbn = isbn;
   }
 }
