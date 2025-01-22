@@ -18,15 +18,20 @@ public class JpaMain {
 
     try {
 
-      Team team = new Team();
-      team.setName("TeamA");
-      em.persist(team);
+//      Team team = new Team();
+//      team.setName("TeamA");
+//      em.persist(team);
 //
-      Member member = new Member();
-      member.setName("member1");
 //      member.changeTeam(team);
 //      member.setTeam(team);
+      Member member = new Member();
+      member.setName("Monte");
+      System.out.println("==========BEFORE PERSIST==========");
       em.persist(member);
+      System.out.println("==========AFTER PERSIST==========");
+      member.setName("updated_name");
+      System.out.println("==========ENTITY UPDATED==========");
+      em.flush();
 //
 ////      team.getMembers().add(member); // Member.class에 setTeam() 안에 넣어줘
 //
