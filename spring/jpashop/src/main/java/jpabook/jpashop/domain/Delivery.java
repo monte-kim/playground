@@ -2,6 +2,7 @@ package jpabook.jpashop.domain;
 
 import static jakarta.persistence.FetchType.LAZY;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -21,6 +22,7 @@ public class Delivery {
   @GeneratedValue
   private Long id;
 
+  @JsonIgnore
   @OneToOne(mappedBy = "delivery", fetch = LAZY)
   private Order order;
 
