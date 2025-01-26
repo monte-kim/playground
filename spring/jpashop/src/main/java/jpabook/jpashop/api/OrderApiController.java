@@ -10,6 +10,7 @@ import jpabook.jpashop.domain.Address;
 import jpabook.jpashop.domain.Order;
 import jpabook.jpashop.domain.OrderItem;
 import jpabook.jpashop.domain.OrderStatus;
+import jpabook.jpashop.queryservice.OrderQueryService;
 import jpabook.jpashop.repository.OrderRepository;
 import jpabook.jpashop.repository.OrderSearch;
 import jpabook.jpashop.repository.order.query.OrderFlatDto;
@@ -28,6 +29,7 @@ public class OrderApiController {
 
   private final OrderRepository orderRepository;
   private final OrderQueryRepository orderQueryRepository;
+  private final OrderQueryService orderQueryService;
 
   @GetMapping("/api/v1/orders")
   public List<Order> ordersV1() {
@@ -43,10 +45,7 @@ public class OrderApiController {
 
   @GetMapping("/api/v2/orders")
   public List<OrderDto> ordersV2() {
-    List<Order> orders = orderRepository.findAllByString(new OrderSearch());
-    return orders.stream()
-        .map(OrderDto::new)
-        .toList();
+    return orderQueryService.ordersV2();
   }
 
   @GetMapping("/api/v3/orders")
@@ -97,7 +96,7 @@ public class OrderApiController {
   }
 
   @Getter
-  static class OrderDto {
+  public static class OrderDto {
 
     private Long orderId;
     private String name;
