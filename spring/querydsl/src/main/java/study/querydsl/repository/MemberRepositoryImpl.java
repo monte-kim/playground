@@ -18,6 +18,10 @@ import study.querydsl.dto.QMemberTeamDto;
 
 public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
+//    public MemberRepositoryImpl() {
+//        super(Member.class);
+//    }
+
     private final JPAQueryFactory queryFactory;
 
     public MemberRepositoryImpl(EntityManager em) {
@@ -26,6 +30,24 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
     @Override
     public List<MemberTeamDto> search(MemberSearchCondition condition) {
+//        List<MemberTeamDto> result = from(member)
+//            .leftJoin(member.team, team)
+//            .where(
+//                usernameEq(condition.getUsername()),
+//                teamNameEq(condition.getTeamName()),
+//                ageGoe(condition.getAgeGoe()),
+//                ageLoe(condition.getAgeLoe())
+//            )
+//            .select(
+//                new QMemberTeamDto(
+//                    member.id.as("memberId"),
+//                    member.username,
+//                    member.age,
+//                    team.id.as("teamId"),
+//                    team.name.as("teamName")
+//                )
+//            )
+//            .fetch();
         return queryFactory
             .select(
                 new QMemberTeamDto(
