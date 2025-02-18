@@ -1,11 +1,13 @@
 package hello.proxy.app.v3;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+@Service
 @RequiredArgsConstructor
-public class OrderServiceV2 {
+public class OrderServiceV3 {
 
-    private final OrderRepositoryV2 orderRepository;
+    private final OrderRepositoryV3 orderRepository;
 
     public void orderItem(String itemId) {
         orderRepository.save(itemId);

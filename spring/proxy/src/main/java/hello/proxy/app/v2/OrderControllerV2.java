@@ -1,19 +1,26 @@
-package hello.proxy.app.v1;
+package hello.proxy.app.v2;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
+//@RequestMapping
+@RestController
 @RequiredArgsConstructor
-public class OrderControllerV1Impl implements OrderControllerV1{
+public class OrderControllerV2 {
 
-    private final OrderServiceV1 orderService;
+    private final OrderServiceV2 orderService;
 
-    @Override
-    public String request(String itemId) {
+    @GetMapping("/v2/request")
+    public String request(@RequestParam("itemId") String itemId) {
         orderService.orderItem(itemId);
         return "ok";
     }
 
-    @Override
+    @GetMapping("/v2/no-log")
     public String noLog() {
         return "ok";
     }

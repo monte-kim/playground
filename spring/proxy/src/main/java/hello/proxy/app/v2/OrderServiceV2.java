@@ -1,13 +1,14 @@
-package hello.proxy.app.v1;
+package hello.proxy.app.v2;
 
+import hello.proxy.app.v1.OrderRepositoryV1;
+import hello.proxy.app.v1.OrderServiceV1;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class OrderServiceV1Impl implements OrderServiceV1{
+public class OrderServiceV2 {
 
-    private final OrderRepositoryV1 orderRepository;
+    private final OrderRepositoryV2 orderRepository;
 
-    @Override
     public void orderItem(String itemId) {
         orderRepository.save(itemId);
     }
