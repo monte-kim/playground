@@ -5,12 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class CallServiceV0 {
-
-    public void external() {
-        log.info("call external");
-        internal();
-    }
+public class InternalService {
 
     public void internal() {
         log.info("call internal");
