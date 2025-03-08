@@ -1,3 +1,1 @@
-# 개인 연습 레포지토리
-
-인강 실습 프로젝트 및 개인 연습 프로젝트를 담은 레포지토리입니다.
+<img width="100%" alt="playground" src="https://github.com/user-attachments/assets/49ebf116-94f2-402e-970a-ce911d0859b5">
