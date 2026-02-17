@@ -7,10 +7,7 @@ import { Skull, Play, Pause, RefreshCw, Zap, AlertTriangle } from "lucide-react"
 export default function FocusGuard() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [models, setModels] = useState<{ coco: any; pose: any }>({
-    coco: null,
-    pose: null,
-  });
+  const [model, setModel] = useState<any>(null);
   const [isFocusing, setIsFocusing] = useState(true);
   const [focusTime, setFocusTime] = useState(0); // in ms
   const [penaltyTime, setPenaltyTime] = useState(0); // in ms
@@ -30,23 +27,11 @@ export default function FocusGuard() {
   useEffect(() => {
     const loadModels = async () => {
       try {
-        setStatus("LOADING AI MODELS...");
-        const [cocoSsd, posenet] = await Promise.all([
-          import("@tensorflow-models/coco-ssd"),
-          import("@tensorflow-models/posenet"),
-        ]);
-        
+        setStatus("LOADING AI MODEL...");
+        const cocoSsd = await import("@tensorflow-models/coco-ssd");
         await tf.ready();
-        const [coco, pose] = await Promise.all([
-          cocoSsd.load(),
-          posenet.load({
-            architecture: "MobileNetV1",
-            outputStride: 16,
-            inputResolution: { width: 513, height: 513 },
-            multiplier: 0.75,
-          }),
-        ]);
-        setModels({ coco, pose });
+        const loadedModel = await cocoSsd.load();
+        setModel(loadedModel);
         setStatus("READY TO GUARD");
       } catch (err) {
         console.error("Model load error:", err);
@@ -82,16 +67,13 @@ export default function FocusGuard() {
       const deltaTime = lastTimeRef.current ? currentTime - lastTimeRef.current : 0;
       lastTimeRef.current = currentTime;
 
-      if (models.coco && models.pose && videoRef.current && isRunning && videoRef.current.readyState >= 2) {
+      if (model && videoRef.current && isRunning && videoRef.current.readyState >= 2) {
         try {
-          const [predictions, pose] = await Promise.all([
-            models.coco.detect(videoRef.current),
-            models.pose.estimateSinglePose(videoRef.current, { flipHorizontal: false }),
-          ]);
-
+          const predictions = await model.detect(videoRef.current);
           const detectedObjects = predictions.filter((p: any) => p.score > 0.5).map((p: any) => p.class);
+          
           const hasPhone = detectedObjects.includes("cell phone");
-          const hasPerson = pose.score > 0.15;
+          const hasPerson = detectedObjects.includes("person");
 
           setObjects(detectedObjects);
 
@@ -99,80 +81,31 @@ export default function FocusGuard() {
             const ctx = canvasRef.current.getContext("2d");
             if (ctx) {
               const { width, height } = canvasRef.current;
-              const scaleX = width / videoRef.current.videoWidth;
-              const scaleY = height / videoRef.current.videoHeight;
-
               ctx.clearRect(0, 0, width, height);
 
-              // 1. 배경 (아주 어둡게)
+              // 1-Bit 스타일 배경 렌더링 (단순화)
               ctx.save();
               ctx.translate(width, 0);
               ctx.scale(-1, 1);
-              ctx.filter = "grayscale(100%) contrast(200%) brightness(0.4) blur(4px)";
+              ctx.filter = "grayscale(100%) contrast(200%) brightness(0.5)";
               ctx.drawImage(videoRef.current, 0, 0, width, height);
-              ctx.filter = "none";
-
-              if (hasPerson) {
-                const kp = pose.keypoints;
-                const findKp = (name: string) => kp.find((k: any) => k.part === name);
-
-                const drawPart = (partName: string, size: number, color = "black") => {
-                  const point = findKp(partName);
-                  if (point && point.score > 0.5) {
-                    const x = point.position.x * scaleX;
-                    const y = point.position.y * scaleY;
-                    ctx.fillStyle = color;
-                    ctx.fillRect(x - size / 2, y - size / 2, size, size);
-                    ctx.strokeStyle = "white";
-                    ctx.lineWidth = 2;
-                    ctx.strokeRect(x - size / 2, y - size / 2, size, size);
-                    return { x, y };
-                  }
-                  return null;
-                };
-
-                const drawBone = (p1: any, p2: any) => {
-                  const pt1 = findKp(p1);
-                  const pt2 = findKp(p2);
-                  if (pt1 && pt2 && pt1.score > 0.3 && pt2.score > 0.3) {
-                    ctx.beginPath();
-                    ctx.moveTo(pt1.position.x * scaleX, pt1.position.y * scaleY);
-                    ctx.lineTo(pt2.position.x * scaleX, pt2.position.y * scaleY);
-                    ctx.strokeStyle = "white";
-                    ctx.lineWidth = 8;
-                    ctx.stroke();
-                  }
-                };
-
-                // 관절 연결 (뼈대)
-                drawBone("leftShoulder", "rightShoulder");
-                drawBone("leftShoulder", "leftElbow");
-                drawBone("leftElbow", "leftWrist");
-                drawBone("rightShoulder", "rightElbow");
-                drawBone("rightElbow", "rightWrist");
-                drawBone("leftShoulder", "leftHip");
-                drawBone("rightShoulder", "rightHip");
-                drawBone("leftHip", "rightHip");
-
-                // 관절 박스 (아바타 부위)
-                const nose = drawPart("nose", 70); // 머리
-                if (nose) {
-                  // 눈동자 그리기
-                  ctx.fillStyle = "white";
-                  ctx.fillRect(nose.x - 20, nose.y - 10, 10, 10);
-                  ctx.fillRect(nose.x + 10, nose.y - 10, 10, 10);
-                }
-                
-                drawPart("leftShoulder", 30);
-                drawPart("rightShoulder", 30);
-                drawPart("leftElbow", 25);
-                drawPart("rightElbow", 25);
-                drawPart("leftWrist", 40); // 손
-                drawPart("rightWrist", 40); // 손
-                drawPart("leftHip", 35);
-                drawPart("rightHip", 35);
-              }
               ctx.restore();
+
+              // 감지된 오브젝트 바운딩 박스 (도트 스타일)
+              predictions.forEach((p: any) => {
+                if (p.score > 0.5) {
+                  const [x, y, w, h] = p.bbox;
+                  ctx.strokeStyle = "white";
+                  ctx.lineWidth = 4;
+                  // 거울 모드 대응 좌표 변환
+                  const displayX = width - (x + w);
+                  ctx.strokeRect(displayX, y, w, h);
+                  
+                  ctx.fillStyle = "white";
+                  ctx.font = "10px monospace";
+                  ctx.fillText(p.class.toUpperCase(), displayX, y > 10 ? y - 5 : 10);
+                }
+              });
             }
           }
 
@@ -188,9 +121,6 @@ export default function FocusGuard() {
         } catch (err) {
           console.error("Render loop error:", err);
         }
-      } else {
-        // Even if not active, keep updating lastTimeRef when isRunning
-        // to avoid huge deltaTime jumps
       }
       animationId = requestAnimationFrame(renderLoop);
     };
@@ -202,7 +132,7 @@ export default function FocusGuard() {
       lastTimeRef.current = null;
     }
     return () => cancelAnimationFrame(animationId);
-  }, [models, isRunning]);
+  }, [model, isRunning]);
 
   const resetGame = () => {
     setFocusTime(0);
@@ -249,7 +179,7 @@ export default function FocusGuard() {
           {!isRunning && (
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 z-10 bg-black">
               <p className="text-xs animate-pulse font-mono">{status}</p>
-              {models.coco && models.pose && (
+              {model && (
                 <button
                   onClick={startCamera}
                   className="bit-border px-8 py-4 bg-black text-white hover:bg-white hover:text-black transition-colors font-mono font-bold"
@@ -282,7 +212,7 @@ export default function FocusGuard() {
 
           <div className="bit-border p-4 bg-white text-black flex justify-between items-center">
             <div className="text-[10px] font-bold uppercase tracking-widest">Status: {status}</div>
-            <div className="text-[8px] opacity-70">SKELETAL_AVATAR_V2</div>
+            <div className="text-[8px] opacity-70">1-BIT_VISION_V1</div>
           </div>
         </div>
       </div>
