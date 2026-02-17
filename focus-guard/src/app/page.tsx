@@ -14,11 +14,20 @@ export default function FocusGuard() {
     pose: null,
   });
   const [isFocusing, setIsFocusing] = useState(true);
-  const [exp, setExp] = useState(0);
-  const [penalty, setPenalty] = useState(0);
+  const [focusTime, setFocusTime] = useState(0); // in ms
+  const [penaltyTime, setPenaltyTime] = useState(0); // in ms
   const [status, setStatus] = useState("INITIALIZING ENGINES...");
   const [isRunning, setIsRunning] = useState(false);
   const [objects, setObjects] = useState<string[]>([]);
+  const lastTimeRef = useRef<number | null>(null);
+
+  const formatTime = (ms: number) => {
+    const totalSeconds = Math.floor(ms / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+  };
 
   useEffect(() => {
     const loadModels = async () => {
@@ -64,6 +73,10 @@ export default function FocusGuard() {
     let animationId: number;
 
     const renderLoop = async () => {
+      const currentTime = performance.now();
+      const deltaTime = lastTimeRef.current ? currentTime - lastTimeRef.current : 0;
+      lastTimeRef.current = currentTime;
+
       if (models.coco && models.pose && videoRef.current && isRunning && videoRef.current.readyState >= 2) {
         try {
           const [predictions, pose] = await Promise.all([
@@ -134,7 +147,20 @@ export default function FocusGuard() {
                 drawBone("rightElbow", "rightWrist");
                 drawBone("leftShoulder", "leftHip");
                 drawBone("rightShoulder", "rightHip");
-                drawBone("leftHip", "rightHip");
+                drawHipJoints("leftHip", "rightHip");
+
+                function drawHipJoints(p1: any, p2: any) {
+                  const pt1 = findKp(p1);
+                  const pt2 = findKp(p2);
+                  if (pt1 && pt2 && pt1.score > 0.3 && pt2.score > 0.3) {
+                    ctx.beginPath();
+                    ctx.moveTo(pt1.position.x * scaleX, pt1.position.y * scaleY);
+                    ctx.lineTo(pt2.position.x * scaleX, pt2.position.y * scaleY);
+                    ctx.strokeStyle = "white";
+                    ctx.lineWidth = 8;
+                    ctx.stroke();
+                  }
+                }
 
                 // 관절 박스 (아바타 부위)
                 const nose = drawPart("nose", 70); // 머리
@@ -160,29 +186,35 @@ export default function FocusGuard() {
 
           if (hasPerson && !hasPhone) {
             setIsFocusing(true);
-            setExp((prev) => prev + 1);
+            setFocusTime((prev) => prev + deltaTime);
             setStatus("FOCUSING...");
           } else {
             setIsFocusing(false);
-            setPenalty((prev) => prev + 1);
+            setPenaltyTime((prev) => prev + deltaTime);
             setStatus(hasPhone ? "PHONE DETECTED!" : "USER MISSING!");
           }
         } catch (err) {
           console.error("Render loop error:", err);
         }
+      } else {
+        // Even if not active, keep updating lastTimeRef when isRunning
+        // to avoid huge deltaTime jumps
       }
       animationId = requestAnimationFrame(renderLoop);
     };
 
     if (isRunning) {
+      lastTimeRef.current = performance.now();
       renderLoop();
+    } else {
+      lastTimeRef.current = null;
     }
     return () => cancelAnimationFrame(animationId);
   }, [models, isRunning]);
 
   const resetGame = () => {
-    setExp(0);
-    setPenalty(0);
+    setFocusTime(0);
+    setPenaltyTime(0);
   };
 
   const isDistracted = !isFocusing && isRunning;
@@ -194,15 +226,15 @@ export default function FocusGuard() {
       <div className="w-full max-w-2xl bit-border-double p-6 relative bg-black border-white">
         <div className="flex justify-between items-center mb-8 border-b-4 border-white pb-4 font-mono">
           <div>
-            <div className="text-[10px] opacity-70 font-bold uppercase">EXP</div>
+            <div className="text-[10px] opacity-70 font-bold uppercase">FOCUS TIME</div>
             <div className="text-xl flex items-center gap-2">
-              <Zap className="w-5 h-5" /> {exp.toString().padStart(6, "0")}
+              <Zap className="w-5 h-5" /> {formatTime(focusTime)}
             </div>
           </div>
           <div className="text-right">
-            <div className="text-[10px] opacity-70 font-bold uppercase">PENALTY</div>
+            <div className="text-[10px] opacity-70 font-bold uppercase">PENALTY TIME</div>
             <div className="text-xl flex items-center gap-2 justify-end">
-              {penalty.toString().padStart(6, "0")} <Skull className="w-5 h-5" />
+              {formatTime(penaltyTime)} <Skull className="w-5 h-5" />
             </div>
           </div>
         </div>
@@ -242,10 +274,10 @@ export default function FocusGuard() {
             <div className="flex-1 bit-border h-8 relative overflow-hidden">
               <div
                 className="absolute inset-y-0 left-0 bg-white transition-all duration-300"
-                style={{ width: `${Math.min((exp / 10000) * 100, 100)}%` }}
+                style={{ width: `${Math.min((focusTime / 3600000) * 100, 100)}%` }}
               />
               <div className="absolute inset-0 flex items-center justify-center text-[8px] font-bold mix-blend-difference">
-                PROGRESS
+                1 HOUR GOAL
               </div>
             </div>
             <button onClick={() => setIsRunning(!isRunning)} className="bit-border p-2 hover:bg-white hover:text-black">
