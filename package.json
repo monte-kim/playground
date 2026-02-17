@@ -1,12 +1,12 @@
 {
-  "name": "focus-guard-monorepo",
+  "name": "playground",
   "private": true,
   "workspaces": [
-    "playground/*"
+    "focus-guard"
   ],
   "scripts": {
-    "dev": "npm run dev -w playground/focus-quest",
-    "build": "npm run build -w playground/focus-quest",
-    "lint": "npm run lint -w playground/focus-quest"
+    "dev": "npm run dev -w focus-guard",
+    "build": "npm run build -w focus-guard",
+    "lint": "npm run lint -w focus-guard"
   }
 }
