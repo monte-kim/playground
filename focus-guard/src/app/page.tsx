@@ -2,14 +2,12 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import * as tf from "@tensorflow/tfjs";
-import * as cocoSsd from "@tensorflow-models/coco-ssd";
-import * as posenet from "@tensorflow-models/posenet";
 import { Skull, Play, Pause, RefreshCw, Zap, AlertTriangle } from "lucide-react";
 
 export default function FocusGuard() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [models, setModels] = useState<{ coco: cocoSsd.ObjectDetection | null; pose: posenet.PoseNet | null }>({
+  const [models, setModels] = useState<{ coco: any; pose: any }>({
     coco: null,
     pose: null,
   });
@@ -32,6 +30,12 @@ export default function FocusGuard() {
   useEffect(() => {
     const loadModels = async () => {
       try {
+        setStatus("LOADING AI MODELS...");
+        const [cocoSsd, posenet] = await Promise.all([
+          import("@tensorflow-models/coco-ssd"),
+          import("@tensorflow-models/posenet"),
+        ]);
+        
         await tf.ready();
         const [coco, pose] = await Promise.all([
           cocoSsd.load(),
@@ -45,6 +49,7 @@ export default function FocusGuard() {
         setModels({ coco, pose });
         setStatus("READY TO GUARD");
       } catch (err) {
+        console.error("Model load error:", err);
         setStatus("ENGINE ERROR");
       }
     };
@@ -84,7 +89,7 @@ export default function FocusGuard() {
             models.pose.estimateSinglePose(videoRef.current, { flipHorizontal: false }),
           ]);
 
-          const detectedObjects = predictions.filter((p) => p.score > 0.5).map((p) => p.class);
+          const detectedObjects = predictions.filter((p: any) => p.score > 0.5).map((p: any) => p.class);
           const hasPhone = detectedObjects.includes("cell phone");
           const hasPerson = pose.score > 0.15;
 
@@ -109,7 +114,7 @@ export default function FocusGuard() {
 
               if (hasPerson) {
                 const kp = pose.keypoints;
-                const findKp = (name: string) => kp.find((k) => k.part === name);
+                const findKp = (name: string) => kp.find((k: any) => k.part === name);
 
                 const drawPart = (partName: string, size: number, color = "black") => {
                   const point = findKp(partName);
