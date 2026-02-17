@@ -147,20 +147,7 @@ export default function FocusGuard() {
                 drawBone("rightElbow", "rightWrist");
                 drawBone("leftShoulder", "leftHip");
                 drawBone("rightShoulder", "rightHip");
-                drawHipJoints("leftHip", "rightHip");
-
-                function drawHipJoints(p1: any, p2: any) {
-                  const pt1 = findKp(p1);
-                  const pt2 = findKp(p2);
-                  if (pt1 && pt2 && pt1.score > 0.3 && pt2.score > 0.3) {
-                    ctx.beginPath();
-                    ctx.moveTo(pt1.position.x * scaleX, pt1.position.y * scaleY);
-                    ctx.lineTo(pt2.position.x * scaleX, pt2.position.y * scaleY);
-                    ctx.strokeStyle = "white";
-                    ctx.lineWidth = 8;
-                    ctx.stroke();
-                  }
-                }
+                drawBone("leftHip", "rightHip");
 
                 // 관절 박스 (아바타 부위)
                 const nose = drawPart("nose", 70); // 머리
